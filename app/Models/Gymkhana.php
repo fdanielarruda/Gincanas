@@ -11,11 +11,13 @@ class Gymkhana extends Model
 
     protected $fillable = [
         'title',
-        'start_date'
+        'start_date',
+        'is_active'
     ];
 
     protected $casts = [
-        'start_date' => 'date'
+        'start_date' => 'date',
+        'is_active' => 'boolean'
     ];
 
     public function teams()

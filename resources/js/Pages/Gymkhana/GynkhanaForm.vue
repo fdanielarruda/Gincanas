@@ -13,6 +13,7 @@ const props = defineProps({
         default: () => ({
             title: '',
             start_date: '',
+            is_active: false
         }),
     },
 });
@@ -22,6 +23,7 @@ const emit = defineEmits(['form-submitted']);
 const form = useForm({
     title: props.initialData.title,
     start_date: formatForInput(props.initialData.start_date),
+    is_active: props.initialData.is_active
 });
 
 const submit = () => {
@@ -42,6 +44,26 @@ const submit = () => {
                 <InputLabel for="start_date" value="Data de Início" />
                 <TextInput id="start_date" type="date" class="mt-1 block w-full" v-model="form.start_date" required />
                 <InputError class="mt-2" :message="form.errors.start_date" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel value="Status" />
+                <div class="flex items-center mt-2">
+                    <input type="radio" id="active" :value="true" v-model="form.is_active"
+                        class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                    <label for="active" class="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Ativo
+                    </label>
+                </div>
+
+                <div class="flex items-center mt-2">
+                    <input type="radio" id="inactive" :value="false" v-model="form.is_active"
+                        class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                    <label for="inactive" class="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Inativo
+                    </label>
+                </div>
+                <InputError class="mt-2" :message="form.errors.is_active" />
             </div>
         </div>
 

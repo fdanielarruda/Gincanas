@@ -31,6 +31,12 @@ export const staticNavigationLinks: NavigationLink[] = [
         route: 'gymkhana.index',
         type: 'link',
     },
+    {
+        label: 'Resultados',
+        icon: UsersIcon,
+        route: 'results.index',
+        type: 'link',
+    },
 
     { type: 'separator' },
     {

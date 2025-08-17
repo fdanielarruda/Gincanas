@@ -23,7 +23,8 @@ class GymkhanaStoreRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
-            'start_date' => ['nullable', 'date']
+            'start_date' => ['nullable', 'date'],
+            'is_active' => ['required', 'boolean']
         ];
     }
 }

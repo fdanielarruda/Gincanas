@@ -12,6 +12,7 @@ interface Gymkhana {
     id: number;
     title: string;
     start_date: string;
+    is_active: boolean;
 }
 
 const props = defineProps<{
@@ -58,6 +59,9 @@ const {
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                                             Data de Início</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+                                            Status</th>
                                         <th scope="col" class="relative px-6 py-3"><span class="sr-only">Ações</span>
                                         </th>
                                     </tr>
@@ -68,6 +72,16 @@ const {
                                         <td class="px-6 py-4 whitespace-nowrap">{{ gymkhana.title }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             {{ formatDateForDisplay(gymkhana.start_date) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span v-if="gymkhana.is_active"
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                Ativo
+                                            </span>
+                                            <span v-else
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                Inativo
+                                            </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <IconButton :href="route('gymkhana.teams.index', gymkhana.id)" color="blue"
