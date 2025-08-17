@@ -2,9 +2,11 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import IconButton from '@/Components/Itens/IconButton.vue';
 import TextButton from '@/Components/Itens/TextButton.vue';
+import ConfirmDeletionModal from '@/Components/ConfirmDeletionModal.vue';
 import { formatDateForDisplay } from '@/Utils/DateUtils';
 import { Head } from '@inertiajs/vue3';
-import { PencilSquareIcon, UserGroupIcon } from '@heroicons/vue/24/solid';
+import { PencilSquareIcon, TrashIcon, UserGroupIcon } from '@heroicons/vue/24/solid';
+import { useDeleter } from '@/Composables/useDeleter';
 
 interface Gymkhana {
     id: number;
@@ -15,6 +17,17 @@ interface Gymkhana {
 const props = defineProps<{
     gymkhanas: Gymkhana[];
 }>();
+
+const {
+    confirmingDeletion,
+    itemToDelete,
+    openConfirmModal,
+    closeConfirmModal,
+    performDeletion,
+} = useDeleter<Gymkhana>(
+    'gymkhana.destroy',
+    (gymkhana) => [gymkhana.id]
+);
 </script>
 
 <template>
@@ -63,8 +76,13 @@ const props = defineProps<{
                                             </IconButton>
 
                                             <IconButton :href="route('gymkhana.teams.index', gymkhana.id)" color="blue"
-                                                title="Times" class="ml-1">
+                                                title="Equipes" class="ml-1">
                                                 <UserGroupIcon class="h-5 w-5" />
+                                            </IconButton>
+
+                                            <IconButton as="button" color="red" title="Deletar" class="ml-1"
+                                                @click="openConfirmModal(gymkhana)">
+                                                <TrashIcon class="h-5 w-5" />
                                             </IconButton>
                                         </td>
                                     </tr>
@@ -79,4 +97,8 @@ const props = defineProps<{
             </div>
         </div>
     </AuthenticatedLayout>
+
+    <ConfirmDeletionModal :show="confirmingDeletion" title="Deletar Gincana"
+        :message="`Tem certeza que deseja deletar a gincana '${itemToDelete?.title}'? Todos os dados associados, incluindo equipes, serão removidos.`"
+        @close="closeConfirmModal" @confirm="performDeletion" />
 </template>

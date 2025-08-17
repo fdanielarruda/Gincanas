@@ -2,10 +2,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import IconButton from '@/Components/Itens/IconButton.vue';
 import TextButton from '@/Components/Itens/TextButton.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid';
 import ConfirmDeletionModal from '@/Components/ConfirmDeletionModal.vue';
-import { ref } from 'vue';
+import { useDeleter } from '@/Composables/useDeleter';
 
 interface Gymkhana {
     id: number;
@@ -23,27 +23,20 @@ const props = defineProps<{
     gymkhana: Gymkhana;
 }>();
 
-const confirmingTeamRemoval = ref(false);
-const teamToRemove = ref<Team | null>(null);
+const {
+    confirmingDeletion,
+    itemToDelete,
+    openConfirmModal,
+    closeConfirmModal,
+    performDeletion,
+} = useDeleter<Team>(
+    'gymkhana.teams.destroy',
+    (team) => [props.gymkhana.id, team.id]
+);
 
-const openConfirmRemoveModal = (team: Team) => {
-    teamToRemove.value = team;
-    confirmingTeamRemoval.value = true;
-};
-
-const closeModal = () => {
-    confirmingTeamRemoval.value = false;
-    teamToRemove.value = null;
-};
-
-const removeTeam = () => {
-    if (!teamToRemove.value) return;
-
-    router.delete(route('gymkhana.teams.destroy', [props.gymkhana.id, teamToRemove.value.id]), {
-        preserveScroll: true,
-        onSuccess: () => closeModal(),
-    });
-};
+const openConfirmRemoveModal = openConfirmModal;
+const closeModal = closeConfirmModal;
+const removeTeam = performDeletion;
 </script>
 
 <template>
@@ -118,7 +111,7 @@ const removeTeam = () => {
         </div>
     </AuthenticatedLayout>
 
-    <ConfirmDeletionModal :show="confirmingTeamRemoval" title="Remover Inscrição"
-        :message="`Tem certeza que deseja remover a inscrição de '${teamToRemove?.title}' desta gincana?`"
+    <ConfirmDeletionModal :show="confirmingDeletion" title="Remover Inscrição"
+        :message="`Tem certeza que deseja remover a inscrição de '${itemToDelete?.title}' desta gincana?`"
         @close="closeModal" @confirm="removeTeam" />
 </template>
