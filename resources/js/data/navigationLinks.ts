@@ -3,6 +3,9 @@ import {
     HomeIcon,
     ArrowLeftEndOnRectangleIcon,
     UsersIcon,
+    ShieldCheckIcon,
+    TrophyIcon,
+    ChartBarIcon,
 } from '@heroicons/vue/24/solid';
 
 interface NavigationLink {
@@ -27,19 +30,19 @@ export const staticNavigationLinks: NavigationLink[] = [
     },
     {
         label: 'Juízes',
-        icon: UsersIcon,
+        icon: ShieldCheckIcon,
         route: 'users.index',
         type: 'link',
     },
     {
         label: 'Gincanas',
-        icon: UsersIcon,
+        icon: TrophyIcon,
         route: 'gymkhana.index',
         type: 'link',
     },
     {
         label: 'Resultados',
-        icon: UsersIcon,
+        icon: ChartBarIcon,
         route: 'results.index',
         type: 'link',
     },

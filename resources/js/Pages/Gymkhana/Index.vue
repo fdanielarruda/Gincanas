@@ -5,7 +5,7 @@ import TextButton from '@/Components/Itens/TextButton.vue';
 import ConfirmDeletionModal from '@/Components/ConfirmDeletionModal.vue';
 import { formatDateForDisplay } from '@/Utils/DateUtils';
 import { Head } from '@inertiajs/vue3';
-import { PencilSquareIcon, RectangleStackIcon, TrashIcon, UserGroupIcon } from '@heroicons/vue/24/solid';
+import { PencilSquareIcon, RectangleStackIcon, ShieldCheckIcon, TrashIcon, UserGroupIcon } from '@heroicons/vue/24/solid';
 import { useDeleter } from '@/Composables/useDeleter';
 
 interface Gymkhana {
@@ -84,19 +84,19 @@ const {
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <IconButton :href="route('gymkhana.teams.index', gymkhana.id)" color="blue"
-                                                title="Equipes">
+                                            <IconButton :href="route('gymkhana.judges.index', gymkhana.id)"
+                                                color="gray" title="Juízes">
+                                                <ShieldCheckIcon class="h-5 w-5" />
+                                            </IconButton>
+
+                                            <IconButton :href="route('gymkhana.teams.index', gymkhana.id)" class="ml-1"
+                                                color="blue" title="Equipes">
                                                 <UserGroupIcon class="h-5 w-5" />
                                             </IconButton>
 
                                             <IconButton :href="route('gymkhana.phases.index', gymkhana.id)" class="ml-1"
                                                 color="green" title="Fases">
                                                 <RectangleStackIcon class="h-5 w-5" />
-                                            </IconButton>
-
-                                            <IconButton :href="route('gymkhana.judges.index', gymkhana.id)" class="ml-1"
-                                                color="gray" title="Juízes">
-                                                <UserGroupIcon class="h-5 w-5" />
                                             </IconButton>
 
                                             <IconButton :href="route('gymkhana.edit', gymkhana.id)" class="ml-1"
