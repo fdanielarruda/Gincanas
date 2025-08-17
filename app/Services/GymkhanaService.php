@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Gymkhana;
 use App\Models\Team;
 use App\Models\Phase;
+use App\Models\User;
 
 class GymkhanaService
 {
@@ -15,7 +16,7 @@ class GymkhanaService
 
     public function find(int $id): Gymkhana
     {
-        return Gymkhana::with(['teams', 'phases'])
+        return Gymkhana::with(['teams', 'phases', 'judges'])
             ->findOrFail($id);
     }
 
@@ -126,5 +127,37 @@ class GymkhanaService
         $gymkhana = Gymkhana::findOrFail($gymkhana_id);
         $phase = $gymkhana->phases()->findOrFail($phase_id);
         $phase->delete();
+    }
+
+    public function getAvailableJudges(int $gymkhana_id): array
+    {
+        $judges = User::where('type', User::TYPE_JUDGE)
+            ->where('is_active', true)
+            ->get();
+
+        $assignedJudgeIds = Gymkhana::findOrFail($gymkhana_id)->judges()->pluck('users.id')->toArray();
+
+        $availableJudges = $judges->reject(function ($judge) use ($assignedJudgeIds) {
+            return in_array($judge->id, $assignedJudgeIds);
+        });
+
+        return $availableJudges->map(function ($judge) {
+            return [
+                'id' => $judge->id,
+                'name' => $judge->name,
+            ];
+        })->values()->all();
+    }
+
+    public function associateJudges(int $gymkhana_id, array $judgeIds)
+    {
+        $gymkhana = Gymkhana::findOrFail($gymkhana_id);
+        $gymkhana->judges()->attach($judgeIds);
+    }
+
+    public function removeJudge(int $gymkhana_id, int $judgeId)
+    {
+        $gymkhana = Gymkhana::findOrFail($gymkhana_id);
+        $gymkhana->judges()->detach($judgeId);
     }
 }

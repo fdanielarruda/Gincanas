@@ -29,4 +29,9 @@ class Gymkhana extends Model
     {
         return $this->hasMany(Phase::class);
     }
+
+    public function judges()
+    {
+        return $this->belongsToMany(User::class, 'gymkhana_judges', 'gymkhana_id', 'judge_id');
+    }
 }

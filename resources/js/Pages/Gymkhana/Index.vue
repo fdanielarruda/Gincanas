@@ -94,6 +94,11 @@ const {
                                                 <RectangleStackIcon class="h-5 w-5" />
                                             </IconButton>
 
+                                            <IconButton :href="route('gymkhana.judges.index', gymkhana.id)" class="ml-1"
+                                                color="gray" title="Juízes">
+                                                <UserGroupIcon class="h-5 w-5" />
+                                            </IconButton>
+
                                             <IconButton :href="route('gymkhana.edit', gymkhana.id)" class="ml-1"
                                                 color="yellow" title="Editar">
                                                 <PencilSquareIcon class="h-5 w-5" />
