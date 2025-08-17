@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Gymkhana;
 use App\Models\Team;
+use App\Models\Phase;
 
 class GymkhanaService
 {
@@ -14,7 +15,7 @@ class GymkhanaService
 
     public function find(int $id): Gymkhana
     {
-        return Gymkhana::with(['teams'])
+        return Gymkhana::with(['teams', 'phases'])
             ->findOrFail($id);
     }
 
@@ -40,7 +41,6 @@ class GymkhanaService
     public function createTeam(int $gymkhana_id, array $data): Team
     {
         $gymkhana = Gymkhana::findOrFail($gymkhana_id);
-
         $team = $gymkhana->teams()->create($data);
 
         return $team;
@@ -71,5 +71,40 @@ class GymkhanaService
         $gymkhana = Gymkhana::findOrFail($gymkhana_id);
         $team = $gymkhana->teams()->findOrFail($team_id);
         $team->delete();
+    }
+
+    public function createPhase(int $gymkhana_id, array $data): Phase
+    {
+        $gymkhana = Gymkhana::findOrFail($gymkhana_id);
+        $phase = $gymkhana->phases()->create($data);
+
+        return $phase;
+    }
+
+    public function prepareForEditPhase(int $gymkhana_id, int $phase_id): array
+    {
+        $gymkhana = Gymkhana::findOrFail($gymkhana_id);
+        $phase = $gymkhana->phases()->findOrFail($phase_id);
+
+        return [
+            'gymkhana' => $gymkhana,
+            'phase' => $phase
+        ];
+    }
+
+    public function updatePhase(int $gymkhana_id, int $phase_id, array $data): Phase
+    {
+        $gymkhana = Gymkhana::findOrFail($gymkhana_id);
+        $phase = $gymkhana->phases()->findOrFail($phase_id);
+        $phase->update($data);
+
+        return $phase;
+    }
+
+    public function deletePhase(int $gymkhana_id, int $phase_id)
+    {
+        $gymkhana = Gymkhana::findOrFail($gymkhana_id);
+        $phase = $gymkhana->phases()->findOrFail($phase_id);
+        $phase->delete();
     }
 }

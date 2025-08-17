@@ -5,26 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Gymkhana extends Model
+class Phase extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'gymkhana_id',
         'title',
-        'start_date'
+        'description',
+        'criteria'
     ];
 
     protected $casts = [
-        'start_date' => 'date'
+        'criteria' => 'array'
     ];
 
-    public function teams()
+    public function gymkhana()
     {
-        return $this->hasMany(Team::class);
-    }
-
-    public function phases()
-    {
-        return $this->hasMany(Phase::class);
+        return $this->hasMany(Gymkhana::class);
     }
 }
