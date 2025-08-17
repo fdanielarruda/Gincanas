@@ -20,9 +20,15 @@ interface NavigationLink {
 
 export const staticNavigationLinks: NavigationLink[] = [
     {
-        label: 'Dashboard',
+        label: 'Home',
         icon: HomeIcon,
         route: 'dashboard',
+        type: 'link',
+    },
+    {
+        label: 'Juízes',
+        icon: UsersIcon,
+        route: 'users.index',
         type: 'link',
     },
     {

@@ -47,20 +47,11 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel value="Status" />
                 <div class="flex items-center mt-2">
-                    <input type="radio" id="active" :value="true" v-model="form.is_active"
-                        class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                    <label for="active" class="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <input type="checkbox" id="is_active" v-model="form.is_active"
+                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                    <label for="is_active" class="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
                         Ativo
-                    </label>
-                </div>
-
-                <div class="flex items-center mt-2">
-                    <input type="radio" id="inactive" :value="false" v-model="form.is_active"
-                        class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                    <label for="inactive" class="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Inativo
                     </label>
                 </div>
                 <InputError class="mt-2" :message="form.errors.is_active" />

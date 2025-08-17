@@ -1,22 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue';
 import NavLink from '@/Components/NavLink.vue';
-import { usePage } from '@inertiajs/vue3';
 import { SunIcon, MoonIcon, Bars3Icon, ChevronDownIcon } from '@heroicons/vue/24/solid';
 import { staticNavigationLinks } from '@/data/navigationLinks';
 
-interface AuthUser {
-    id: number;
-    name: string;
-    email: string;
-    is_root: boolean;
-}
-
 const isDark = ref(false);
-const page = usePage();
-
-const authUser = computed<AuthUser | null>(() => page.props.auth.user as AuthUser | null);
-const isRootUser = computed(() => authUser.value && authUser.value.is_root);
 
 function applyTheme(theme: string) {
     if (theme === 'dark') {
@@ -40,9 +28,6 @@ const filteredNavigationLinks = computed(() => {
     return staticNavigationLinks.filter(link => {
         if (link.type === 'separator') {
             return true;
-        }
-        if (link.route === 'admin.index') {
-            return isRootUser.value;
         }
         return true;
     });
