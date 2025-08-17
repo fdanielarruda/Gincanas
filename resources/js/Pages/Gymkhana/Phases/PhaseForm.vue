@@ -8,10 +8,10 @@ import { useForm } from '@inertiajs/vue3';
 import { defineProps, defineEmits } from 'vue';
 import { TrashIcon } from '@heroicons/vue/24/solid';
 
-// Definições de tipo de fase
 const TYPE_CRITERIA = 1;
 const TYPE_QUIZ = 2;
 const TYPE_COLOCATION = 3;
+const TYPE_CHECKLIST = 4;
 
 const props = defineProps({
     initialData: {
@@ -84,6 +84,7 @@ const submit = () => {
                     <option :value="TYPE_CRITERIA">Critérios</option>
                     <option :value="TYPE_QUIZ">Quiz</option>
                     <option :value="TYPE_COLOCATION">Colocação</option>
+                    <option :value="TYPE_CHECKLIST">Checklist</option>
                 </SelectInput>
                 <InputError class="mt-2" :message="form.errors.type" />
             </div>
@@ -106,11 +107,12 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.criteria" />
             </div>
 
-            <div v-if="form.type == TYPE_COLOCATION">
-                <InputLabel value="Colocação e Pontos" />
+            <div v-if="form.type == TYPE_COLOCATION || form.type == TYPE_CHECKLIST">
+                <InputLabel :value="form.type == TYPE_COLOCATION ? 'Colocação e Pontos' : 'Atributo e pontos'" />
                 <div v-for="(colocation, index) in form.colocations" :key="index" class="flex items-center gap-2 mt-2">
                     <TextInput :id="`colocation-place-${index}`" type="text" class="block w-1/2"
-                        v-model="form.colocations[index].place" placeholder="Colocação (ex: 1º Lugar)" />
+                        v-model="form.colocations[index].place"
+                        :placeholder="form.type == TYPE_COLOCATION ? 'Colocação (ex: 1º lugar)' : 'Atributo (ex: Arroz)'" />
                     <TextInput :id="`colocation-points-${index}`" type="number" class="block w-1/2"
                         v-model="form.colocations[index].points" placeholder="Pontos" />
                     <button type="button" @click="removeRow('colocation', index)"
@@ -122,7 +124,7 @@ const submit = () => {
                 </div>
                 <button type="button" @click="addRow('colocation')"
                     class="mt-2 text-blue-500 hover:text-blue-700 font-bold">
-                    + Adicionar Colocação
+                    {{ form.type == TYPE_COLOCATION ? '+ Adicionar Colocação' : '+ Adicionar Atributo' }}
                 </button>
                 <InputError class="mt-2" :message="form.errors.colocations" />
             </div>

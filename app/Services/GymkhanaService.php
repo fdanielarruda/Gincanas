@@ -81,7 +81,7 @@ class GymkhanaService
             if ((int) $data['type'] !== Phase::TYPE_CRITERIA) {
                 unset($data['criteria']);
             }
-            if ((int) $data['type'] !== Phase::TYPE_COLOCATION) {
+            if ((int) $data['type'] !== Phase::TYPE_COLOCATION && (int) $data['type'] !== Phase::TYPE_CHECKLIST) {
                 unset($data['colocations']);
             }
         }
@@ -111,7 +111,7 @@ class GymkhanaService
             if ((int) $data['type'] !== Phase::TYPE_CRITERIA) {
                 $data['criteria'] = null;
             }
-            if ((int) $data['type'] !== Phase::TYPE_COLOCATION) {
+            if ((int) $data['type'] !== Phase::TYPE_COLOCATION && (int) $data['type'] !== Phase::TYPE_CHECKLIST) {
                 $data['colocations'] = null;
             }
         }

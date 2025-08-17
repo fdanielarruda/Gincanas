@@ -12,11 +12,13 @@ class Phase extends Model
     const TYPE_CRITERIA = 1;
     const TYPE_QUIZ = 2;
     const TYPE_COLOCATION = 3;
+    const TYPE_CHECKLIST = 4;
 
     const TYPES = [
         self::TYPE_CRITERIA,
         self::TYPE_QUIZ,
-        self::TYPE_COLOCATION
+        self::TYPE_COLOCATION,
+        self::TYPE_CHECKLIST
     ];
 
     protected $fillable = [

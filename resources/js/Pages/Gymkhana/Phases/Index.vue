@@ -7,10 +7,10 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid';
 import ConfirmDeletionModal from '@/Components/ConfirmDeletionModal.vue';
 import { useDeleter } from '@/Composables/useDeleter';
 
-// Definições de tipo de fase
 const TYPE_CRITERIA = 1;
 const TYPE_QUIZ = 2;
 const TYPE_COLOCATION = 3;
+const TYPE_CHECKLIST = 4;
 
 interface Gymkhana {
     id: number;
@@ -91,7 +91,7 @@ const removePhase = performDeletion;
                                         <td class="px-6 py-4 whitespace-nowrap">{{ phase.title }}</td>
                                         <td class="px-6 py-4">{{ phase.description }}</td>
                                         <td class="px-6 py-4">
-                                            <div v-if="phase.type === TYPE_CRITERIA">
+                                            <div v-if="phase.type == TYPE_CRITERIA">
                                                 <ul v-if="phase.criteria && phase.criteria.length > 0"
                                                     class="list-disc list-inside">
                                                     <li v-for="(criterion, index) in phase.criteria" :key="index">
@@ -100,7 +100,7 @@ const removePhase = performDeletion;
                                                 </ul>
                                                 <span v-else>Nenhum critério</span>
                                             </div>
-                                            <div v-else-if="phase.type === TYPE_COLOCATION">
+                                            <div v-else-if="phase.type == TYPE_COLOCATION || phase.type == TYPE_CHECKLIST">
                                                 <ul v-if="phase.colocations && phase.colocations.length > 0"
                                                     class="list-disc list-inside">
                                                     <li v-for="(colocation, index) in phase.colocations" :key="index">
