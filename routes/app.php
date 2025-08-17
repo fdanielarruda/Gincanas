@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GymkhanaController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])
@@ -15,12 +16,17 @@ Route::middleware(['auth'])
                 Route::get('/{id}/editar', 'edit')->name('edit');
                 Route::put('/{id}', 'update')->name('update');
                 Route::delete('/{id}', 'destroy')->name('destroy');
+            });
 
-                Route::get('/{id}/equipes', 'teams')->name('teams');
-                Route::get('/{id}/equipes/cadastrar', 'createTeam')->name('teams.create');
-                Route::post('/{id}/equipes', 'storeTeam')->name('teams.store');
-                Route::get('/{id}/equipes/{team_id}/editar', 'editTeam')->name('teams.edit');
-                Route::put('/{id}/equipes/{team_id}', 'updateTeam')->name('teams.update');
-                Route::delete('/{id}/equipes/{team_id}', 'destroyTeam')->name('teams.destroy');
+        Route::prefix('gincanas/{gymkhana_id}/equipes')
+            ->name('gymkhana.teams.')
+            ->controller(TeamController::class)
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/cadastrar', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{team_id}/editar', 'edit')->name('edit');
+                Route::put('/{team_id}', 'update')->name('update');
+                Route::delete('/{team_id}', 'destroy')->name('destroy');
             });
     });

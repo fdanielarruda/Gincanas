@@ -75,7 +75,7 @@ const submit = () => {
         </div>
 
         <div class="flex items-center justify-end mt-6">
-            <TextButton :href="route('gymkhana.teams', gymkhanaId)" class="p-4 mr-2" color="gray">
+            <TextButton :href="route('gymkhana.teams.index', gymkhanaId)" class="p-4 mr-2" color="gray">
                 Voltar
             </TextButton>
 

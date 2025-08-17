@@ -62,7 +62,7 @@ const props = defineProps<{
                                                 <PencilSquareIcon class="h-5 w-5" />
                                             </IconButton>
 
-                                            <IconButton :href="route('gymkhana.teams', gymkhana.id)" color="blue"
+                                            <IconButton :href="route('gymkhana.teams.index', gymkhana.id)" color="blue"
                                                 title="Times" class="ml-1">
                                                 <UserGroupIcon class="h-5 w-5" />
                                             </IconButton>

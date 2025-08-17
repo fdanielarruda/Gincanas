@@ -23,15 +23,6 @@ class GymkhanaService
         return Gymkhana::create($data);
     }
 
-    public function createTeam(int $id, array $data): Team
-    {
-        $gymkhana = Gymkhana::findOrFail($id);
-
-        $team = $gymkhana->teams()->create($data);
-
-        return $team;
-    }
-
     public function update(int $id, array $data): Gymkhana
     {
         $gymkhana = Gymkhana::findOrFail($id);
@@ -40,36 +31,45 @@ class GymkhanaService
         return $gymkhana;
     }
 
-    public function updateTeam(int $id, int $team_id, array $data): Team
-    {
-        $gymkhana = Gymkhana::findOrFail($id);
-        $team = $gymkhana->teams()->findOrFail($team_id);
-        $team->update($data);
-
-        return $team;
-    }
-
     public function delete(int $id)
     {
         $gymkhana = Gymkhana::findOrFail($id);
         $gymkhana->delete();
     }
 
-    public function deleteTeam(int $id, int $team_id)
+    public function createTeam(int $gymkhana_id, array $data): Team
     {
-        $gymkhana = Gymkhana::findOrFail($id);
-        $team = $gymkhana->teams()->findOrFail($team_id);
-        $team->delete();
+        $gymkhana = Gymkhana::findOrFail($gymkhana_id);
+
+        $team = $gymkhana->teams()->create($data);
+
+        return $team;
     }
 
-    public function prepareForEdit(int $id, int $team_id): array
+    public function prepareForEditTeam(int $gymkhana_id, int $team_id): array
     {
-        $gymkhana = Gymkhana::findOrFail($id);
+        $gymkhana = Gymkhana::findOrFail($gymkhana_id);
         $team = $gymkhana->teams()->findOrFail($team_id);
 
         return [
             'gymkhana' => $gymkhana,
             'team' => $team
         ];
+    }
+
+    public function updateTeam(int $gymkhana_id, int $team_id, array $data): Team
+    {
+        $gymkhana = Gymkhana::findOrFail($gymkhana_id);
+        $team = $gymkhana->teams()->findOrFail($team_id);
+        $team->update($data);
+
+        return $team;
+    }
+
+    public function deleteTeam(int $gymkhana_id, int $team_id)
+    {
+        $gymkhana = Gymkhana::findOrFail($gymkhana_id);
+        $team = $gymkhana->teams()->findOrFail($team_id);
+        $team->delete();
     }
 }
