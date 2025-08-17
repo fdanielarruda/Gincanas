@@ -82,7 +82,6 @@ const submit = () => {
                 <InputLabel for="type" value="Tipo de Fase" />
                 <SelectInput id="type" v-model="form.type" class="mt-1 block w-full">
                     <option :value="TYPE_CRITERIA">Critérios</option>
-                    <option :value="TYPE_QUIZ">Quiz</option>
                     <option :value="TYPE_COLOCATION">Colocação</option>
                     <option :value="TYPE_CHECKLIST">Checklist</option>
                 </SelectInput>
