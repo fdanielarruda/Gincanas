@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
+import TextButton from '@/Components/Itens/TextButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import { defineProps, defineEmits } from 'vue';
 import { TrashIcon } from '@heroicons/vue/24/solid';
@@ -15,6 +15,10 @@ const props = defineProps({
             participants: [''],
         }),
     },
+    gymkhanaId: {
+        type: Number,
+        required: true,
+    }
 });
 
 const emit = defineEmits(['form-submitted']);
@@ -71,9 +75,13 @@ const submit = () => {
         </div>
 
         <div class="flex items-center justify-end mt-6">
-            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+            <TextButton :href="route('gymkhana.teams', gymkhanaId)" class="p-4 mr-2" color="gray">
+                Voltar
+            </TextButton>
+
+            <TextButton :disabled="form.processing" class="p-4">
                 <slot name="buttonText">Salvar</slot>
-            </PrimaryButton>
+            </TextButton>
         </div>
     </form>
 </template>

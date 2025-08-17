@@ -55,9 +55,13 @@ const removeTeam = () => {
             <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div class="flex justify-between items-center mb-4">
+                        <div class="flex justify-end items-center mb-4">
                             <TextButton :href="route('gymkhana.teams.create', gymkhana.id)" class="p-4">
                                 Nova Equipe
+                            </TextButton>
+
+                            <TextButton :href="route('gymkhana.index')" class="p-4 ml-2" color="gray">
+                                Voltar
                             </TextButton>
                         </div>
 
