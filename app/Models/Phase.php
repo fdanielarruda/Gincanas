@@ -9,15 +9,28 @@ class Phase extends Model
 {
     use HasFactory;
 
+    const TYPE_CRITERIA = 1;
+    const TYPE_QUIZ = 2;
+    const TYPE_COLOCATION = 3;
+
+    const TYPES = [
+        self::TYPE_CRITERIA,
+        self::TYPE_QUIZ,
+        self::TYPE_COLOCATION
+    ];
+
     protected $fillable = [
         'gymkhana_id',
         'title',
         'description',
-        'criteria'
+        'type',
+        'criteria',
+        'colocations'
     ];
 
     protected $casts = [
-        'criteria' => 'array'
+        'criteria' => 'array',
+        'colocations' => 'array'
     ];
 
     public function gymkhana()

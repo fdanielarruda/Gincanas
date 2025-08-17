@@ -10,7 +10,9 @@ interface Gymkhana {
 interface PhaseFormFields {
     title: string;
     description: string;
-    criteria: Array<string>;
+    type: number;
+    criteria?: Array<string>;
+    colocations?: Array<{ place: string, points: number }>;
 }
 
 const props = defineProps<{

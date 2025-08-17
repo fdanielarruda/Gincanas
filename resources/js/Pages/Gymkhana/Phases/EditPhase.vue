@@ -11,13 +11,17 @@ interface Phase {
     id: number;
     title: string;
     description: string;
-    criteria: string[];
+    type: number;
+    criteria?: string[];
+    colocations?: Array<{ place: string, points: number }>;
 }
 
 interface PhaseFormFields {
     title: string;
     description: string;
-    criteria: Array<string>;
+    type: number;
+    criteria?: Array<string>;
+    colocations?: Array<{ place: string, points: number }>;
 }
 
 const props = defineProps<{

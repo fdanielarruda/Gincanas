@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('gymkhana_id')->constrained()->onDelete('cascade');
             $table->string('title');
+            $table->integer('type');
             $table->longText('description')->nullable();
             $table->json('criteria')->nullable();
+            $table->json('colocations')->nullable();
             $table->timestamps();
         });
     }

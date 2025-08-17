@@ -7,6 +7,11 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid';
 import ConfirmDeletionModal from '@/Components/ConfirmDeletionModal.vue';
 import { useDeleter } from '@/Composables/useDeleter';
 
+// Definições de tipo de fase
+const TYPE_CRITERIA = 1;
+const TYPE_QUIZ = 2;
+const TYPE_COLOCATION = 3;
+
 interface Gymkhana {
     id: number;
     title: string;
@@ -17,7 +22,9 @@ interface Phase {
     id: number;
     title: string;
     description: string;
+    type: number;
     criteria: string[];
+    colocations: { place: string, points: number }[];
 }
 
 const props = defineProps<{
@@ -53,7 +60,6 @@ const removePhase = performDeletion;
                             <TextButton :href="route('gymkhana.phases.create', gymkhana.id)" class="p-4">
                                 Nova Fase
                             </TextButton>
-
                             <TextButton :href="route('gymkhana.index')" class="p-4 ml-2" color="gray">
                                 Voltar
                             </TextButton>
@@ -74,7 +80,7 @@ const removePhase = performDeletion;
                                             Descrição</th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                                            Critérios</th>
+                                            Detalhes</th>
                                         <th scope="col" class="relative px-6 py-3"><span class="sr-only">Ações</span>
                                         </th>
                                     </tr>
@@ -85,19 +91,33 @@ const removePhase = performDeletion;
                                         <td class="px-6 py-4 whitespace-nowrap">{{ phase.title }}</td>
                                         <td class="px-6 py-4">{{ phase.description }}</td>
                                         <td class="px-6 py-4">
-                                            <span v-if="phase.criteria && phase.criteria.length > 0">
-                                                {{ phase.criteria.join(', ') }}
-                                            </span>
-                                            <span v-else>
-                                                Nenhum critério
-                                            </span>
+                                            <div v-if="phase.type === TYPE_CRITERIA">
+                                                <ul v-if="phase.criteria && phase.criteria.length > 0"
+                                                    class="list-disc list-inside">
+                                                    <li v-for="(criterion, index) in phase.criteria" :key="index">
+                                                        {{ criterion }}
+                                                    </li>
+                                                </ul>
+                                                <span v-else>Nenhum critério</span>
+                                            </div>
+                                            <div v-else-if="phase.type === TYPE_COLOCATION">
+                                                <ul v-if="phase.colocations && phase.colocations.length > 0"
+                                                    class="list-disc list-inside">
+                                                    <li v-for="(colocation, index) in phase.colocations" :key="index">
+                                                        {{ colocation.place }}: {{ colocation.points }} pts
+                                                    </li>
+                                                </ul>
+                                                <span v-else>Nenhuma colocação definida</span>
+                                            </div>
+                                            <div v-else>
+                                                <span>Não aplicável</span>
+                                            </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <IconButton :href="route('gymkhana.phases.edit', [gymkhana.id, phase.id])"
                                                 color="yellow" title="Editar">
                                                 <PencilSquareIcon class="h-5 w-5" />
                                             </IconButton>
-
                                             <IconButton as="button" color="red" title="Remover Fase" class="ml-1"
                                                 @click.stop="openConfirmRemoveModal(phase)">
                                                 <TrashIcon class="h-5 w-5" />

@@ -76,6 +76,16 @@ class GymkhanaService
     public function createPhase(int $gymkhana_id, array $data): Phase
     {
         $gymkhana = Gymkhana::findOrFail($gymkhana_id);
+
+        if (isset($data['type'])) {
+            if ((int) $data['type'] !== Phase::TYPE_CRITERIA) {
+                unset($data['criteria']);
+            }
+            if ((int) $data['type'] !== Phase::TYPE_COLOCATION) {
+                unset($data['colocations']);
+            }
+        }
+
         $phase = $gymkhana->phases()->create($data);
 
         return $phase;
@@ -96,6 +106,16 @@ class GymkhanaService
     {
         $gymkhana = Gymkhana::findOrFail($gymkhana_id);
         $phase = $gymkhana->phases()->findOrFail($phase_id);
+
+        if (isset($data['type'])) {
+            if ((int) $data['type'] !== Phase::TYPE_CRITERIA) {
+                $data['criteria'] = null;
+            }
+            if ((int) $data['type'] !== Phase::TYPE_COLOCATION) {
+                $data['colocations'] = null;
+            }
+        }
+
         $phase->update($data);
 
         return $phase;

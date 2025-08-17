@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Phases;
 
+use App\Models\Phase;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PhaseStoreRequest extends FormRequest
 {
@@ -24,8 +26,12 @@ class PhaseStoreRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'type' => ['required', 'integer', Rule::in(Phase::TYPES)],
             'criteria' => ['nullable', 'array'],
-            'criteria.*' => ['nullable', 'string', 'max:255']
+            'criteria.*' => ['nullable', 'string', 'max:255'],
+            'colocations' => ['nullable', 'array'],
+            'colocations.*.place' => ['required_with:colocations', 'string'],
+            'colocations.*.points' => ['required_with:colocations', 'integer'],
         ];
     }
 }
