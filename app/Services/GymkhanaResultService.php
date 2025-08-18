@@ -125,6 +125,25 @@ class GymkhanaResultService
         $gymkhanaResult->save();
     }
 
+    public function makeRanking(int $id)
+    {
+        $result = GymkhanaResult::findOrFail($id);
+        $gymkhana = $result->gymkhana;
+
+        return [
+            'id' => $id,
+            'gincana' => [
+                'id' => $gymkhana->id,
+                'title' => $gymkhana->title,
+                'description' => $gymkhana->description,
+            ],
+            'teams' => $gymkhana->teams,
+            'phases' => $gymkhana->phases,
+            'judges' => $gymkhana->judges,
+            'results' => $result->results
+        ];
+    }
+
     public function deleteResult(int $id)
     {
         $result = GymkhanaResult::findOrFail($id);

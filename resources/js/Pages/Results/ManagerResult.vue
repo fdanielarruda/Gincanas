@@ -158,6 +158,12 @@ const submit = () => {
             <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
+                        <div class="flex justify-end items-center mb-4">
+                            <TextButton :href="route('results.ranking', props.id)" class="p-4">
+                                Ver Classificação
+                            </TextButton>
+                        </div>
+
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
                             Gerenciar Resultados da Gincana
                         </h2>
@@ -202,7 +208,7 @@ const submit = () => {
                                         :calculateTotalScore="calculateTotalScore" />
                                 </div>
 
-                                <div class="flex items-center justify-end mt-6">
+                                <div class="flex items-center justify-end mt-6 space-x-4">
                                     <TextButton :disabled="form.processing" class="p-4">
                                         Salvar Resultados
                                     </TextButton>

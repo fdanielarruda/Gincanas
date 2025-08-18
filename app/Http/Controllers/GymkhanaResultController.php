@@ -54,6 +54,13 @@ class GymkhanaResultController extends Controller
         return redirect()->back()->with('success', 'Resultados atualizados com sucesso!');
     }
 
+    public function ranking(int $id)
+    {
+        $data = $this->service->makeRanking($id);
+
+        return Inertia::render('Results/Ranking', $data);
+    }
+
     public function destroy(int $id)
     {
         $this->service->deleteResult($id);

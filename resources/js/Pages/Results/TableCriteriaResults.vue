@@ -34,7 +34,6 @@ const props = defineProps<{
 const getJudgeScore = (teamId: number, judgeId: number, criteriaIndex: number) => {
     const teamPhaseResults = props.results?.[teamId]?.[props.phase.id];
     if (teamPhaseResults && teamPhaseResults[judgeId]) {
-        // Usa `parseFloat` para garantir que o valor é um número
         const score = parseFloat(teamPhaseResults[judgeId][criteriaIndex]);
         return isNaN(score) ? 0 : score;
     }
@@ -43,7 +42,6 @@ const getJudgeScore = (teamId: number, judgeId: number, criteriaIndex: number) =
 
 const getCriteriaTotal = (teamId: number, criteriaIndex: number) => {
     let total = 0;
-    // Itera sobre todos os jurados e soma a nota do critério
     props.judges.forEach(judge => {
         total += getJudgeScore(teamId, judge.id, criteriaIndex);
     });
@@ -53,7 +51,6 @@ const getCriteriaTotal = (teamId: number, criteriaIndex: number) => {
 const getTeamTotal = (teamId: number) => {
     let total = 0;
     if (props.phase.criteria) {
-        // Itera sobre cada critério e usa a função de totalização do critério
         props.phase.criteria.forEach((_, criteriaIndex) => {
             total += getCriteriaTotal(teamId, criteriaIndex);
         });
