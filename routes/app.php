@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\GymkhanaController;
+use App\Http\Controllers\GymkhanaResultController;
 use App\Http\Controllers\JudgeController;
 use App\Http\Controllers\PhaseController;
-use App\Http\Controllers\ResultController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -70,9 +70,11 @@ Route::middleware(['auth'])
 
         Route::prefix('resultados')
             ->name('results.')
-            ->controller(ResultController::class)
+            ->controller(GymkhanaResultController::class)
             ->group(function () {
                 Route::get('/', 'index')->name('index');
-                Route::get('/gincana/{gymkhana_id}', 'gymkhana')->name('gymkhana');
+                Route::get('/cadastrar', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::delete('/{id}', 'destroy')->name('destroy');
             });
     });
