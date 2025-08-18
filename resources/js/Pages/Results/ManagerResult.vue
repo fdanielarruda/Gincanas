@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import TextButton from '@/Components/Itens/TextButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
@@ -49,22 +49,23 @@ const state = reactive({
     activePhase: props.phases[0] ? props.phases[0].id : null,
 });
 
-const initialResults = {};
+const initialResults: { [key: number]: any } = {};
+
 if (props.teams && props.phases) {
     props.teams.forEach(team => {
         initialResults[team.id] = {};
         props.phases.forEach(phase => {
             if (phase.type === TYPE_CRITERIA) {
-                const initialPhaseResults = {};
+                const initialPhaseResults: { [key: number]: number | null } = {};
                 phase.criteria?.forEach((criterion, index) => {
-                    const existingValue = props.results?.[team.id]?.[phase.id]?.[index];
+                    const existingValue = (props.results?.[team.id]?.[phase.id] as { [key: number]: number })?.[index];
                     initialPhaseResults[index] = existingValue !== undefined ? existingValue : null;
                 });
                 initialResults[team.id][phase.id] = initialPhaseResults;
             } else if (phase.type === TYPE_CHECKLIST) {
-                const initialPhaseResults = {};
+                const initialPhaseResults: { [key: string]: number | null } = {};
                 phase.colocations?.forEach(colocation => {
-                    const existingValue = props.results?.[team.id]?.[phase.id]?.[colocation.place];
+                    const existingValue = (props.results?.[team.id]?.[phase.id] as { [key: string]: number })?.[colocation.place];
                     initialPhaseResults[colocation.place] = existingValue !== undefined ? existingValue : null;
                 });
                 initialResults[team.id][phase.id] = initialPhaseResults;
@@ -82,23 +83,29 @@ const form = useForm({
 
 const calculateTotalScore = (teamId: number) => {
     let total = 0;
-    if (form.results && form.results[teamId]) {
-        for (const phaseId in form.results[teamId]) {
+    const teamResults = form.results[teamId];
+
+    if (teamResults) {
+        for (const phaseId in teamResults) {
             const phase = props.phases.find(p => p.id === Number(phaseId));
             if (!phase) continue;
 
-            const phaseResult = form.results[teamId][phaseId];
+            const phaseResult = teamResults[phaseId];
 
             if (phase.type === TYPE_CRITERIA) {
-                for (const criterionIndex in phaseResult) {
-                    total += Number(phaseResult[criterionIndex]) || 0;
+                if (typeof phaseResult === 'object' && phaseResult !== null) {
+                    for (const criterionIndex in phaseResult) {
+                        total += Number(phaseResult[criterionIndex]) || 0;
+                    }
                 }
             } else if (phase.type === TYPE_CHECKLIST && phase.colocations) {
-                for (const colocationPlace in phaseResult) {
-                    const colocation = phase.colocations.find(c => c.place === colocationPlace);
-                    if (colocation) {
-                        const quantity = Number(phaseResult[colocationPlace]) || 0;
-                        total += quantity * colocation.points;
+                if (typeof phaseResult === 'object' && phaseResult !== null) {
+                    for (const colocationPlace in phaseResult) {
+                        const colocation = phase.colocations.find(c => c.place === colocationPlace);
+                        if (colocation) {
+                            const quantity = Number(phaseResult[colocationPlace]) || 0;
+                            total += quantity * colocation.points;
+                        }
                     }
                 }
             } else {
@@ -109,11 +116,11 @@ const calculateTotalScore = (teamId: number) => {
     return total;
 };
 
-const submit = () => {
+const submit = () => { };
 
-};
-
-const activePhase = () => props.phases.find(p => p.id === state.activePhase);
+const currentPhase = computed(() => {
+    return props.phases.find(p => p.id === state.activePhase);
+});
 </script>
 
 <template>
@@ -141,19 +148,21 @@ const activePhase = () => props.phases.find(p => p.id === state.activePhase);
                             </div>
 
                             <form @submit.prevent="submit">
-                                <div v-if="activePhase()">
-                                    <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">{{
-                                        activePhase().title }}</h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{{
-                                        activePhase().description }}</p>
+                                <div v-if="currentPhase">
+                                    <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
+                                        {{ currentPhase.title }}
+                                    </h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                        {{ currentPhase.description }}
+                                    </p>
 
-                                    <TableCriteria v-if="activePhase().type === TYPE_CRITERIA" :phase="activePhase()"
+                                    <TableCriteria v-if="currentPhase.type === TYPE_CRITERIA" :phase="currentPhase"
                                         :teams="props.teams" :form="form" />
-                                    <TableColocation v-else-if="activePhase().type === TYPE_COLOCATION"
-                                        :phase="activePhase()" :teams="props.teams" :form="form" />
-                                    <TableChecklist v-else-if="activePhase().type === TYPE_CHECKLIST"
-                                        :phase="activePhase()" :teams="props.teams" :form="form" />
-                                    <TableDefault v-else :phase="activePhase()" :teams="props.teams" :form="form"
+                                    <TableColocation v-else-if="currentPhase.type === TYPE_COLOCATION"
+                                        :phase="currentPhase" :teams="props.teams" :form="form" />
+                                    <TableChecklist v-else-if="currentPhase.type === TYPE_CHECKLIST"
+                                        :phase="currentPhase" :teams="props.teams" :form="form" />
+                                    <TableDefault v-else :phase="currentPhase" :teams="props.teams" :form="form"
                                         :calculateTotalScore="calculateTotalScore" />
                                 </div>
 

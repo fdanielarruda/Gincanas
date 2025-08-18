@@ -18,7 +18,7 @@ interface Phase {
 }
 
 const props = defineProps<{
-    phase: Phase;
+    phase: Phase | undefined;
     teams: Team[];
     form: ReturnType<typeof useForm>;
 }>();
