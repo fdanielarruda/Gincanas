@@ -80,6 +80,10 @@ const {
                                             {{ formatDateForDisplay(result.updated_at) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <IconButton :href="route('results.manager', result.id)" as="button" color="indigo" title="Resultados">
+                                                <TrashIcon class="h-5 w-5" />
+                                            </IconButton>
+
                                             <IconButton as="button" color="red" title="Deletar" class="ml-1"
                                                 @click="openConfirmModal(result)">
                                                 <TrashIcon class="h-5 w-5" />

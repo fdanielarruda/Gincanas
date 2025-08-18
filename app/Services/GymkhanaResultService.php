@@ -9,7 +9,14 @@ class GymkhanaResultService
 {
     public function list()
     {
-        return GymkhanaResult::with('gymkhana')->get();
+        return GymkhanaResult::with('gymkhana')
+            ->get();
+    }
+    
+    public function find(int $id)
+    {
+        return GymkhanaResult::with('gymkhana')
+            ->findOrFail($id);
     }
 
     public function getActiveGimkhanas()
@@ -44,6 +51,12 @@ class GymkhanaResultService
         $gymkhanaResult->save();
 
         $gymkhanaResult->judges()->attach($gymkhana->judges->pluck('id'));
+    }
+
+    public function update(int $id, array $data)
+    {
+        $result = GymkhanaResult::findOrFail($id);
+        $result->update($data);
     }
 
     public function deleteResult(int $id)
