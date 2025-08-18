@@ -5,6 +5,7 @@ import { defineProps } from 'vue';
 interface Team {
     id: number;
     title: string;
+    participants: string[];
 }
 
 interface Colocation {
@@ -25,36 +26,22 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead class="bg-gray-50 dark:bg-gray-700">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Equipe
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Colocação
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                <tr v-for="team in teams" :key="team.id">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        {{ team.title }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <select
-                            class="block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                            v-model="form.results[team.id][phase.id]"
-                        >
-                            <option :value="null">Selecione uma colocação</option>
-                            <option v-for="colocation in phase.colocations" :key="colocation.place" :value="colocation.points">
-                                {{ colocation.place }} ({{ colocation.points }} pts)
-                            </option>
-                        </select>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="overflow-x-auto mt-6">
+        <div v-for="team in props.teams" :key="team.id" class="p-4 rounded-lg border mb-6">
+            <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ team.title }}</h4>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Participantes: {{ team.participants.join(', ')
+                }}</p>
+
+            <div class="overflow-x-auto">
+                <select
+                    class="block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                    v-model="form.results[team.id][phase.id]">
+                    <option :value="null">Selecione uma colocação</option>
+                    <option v-for="colocation in phase.colocations" :key="colocation.place" :value="colocation.points">
+                        {{ colocation.place }} ({{ colocation.points }} pts)
+                    </option>
+                </select>
+            </div>
+        </div>
     </div>
 </template>
