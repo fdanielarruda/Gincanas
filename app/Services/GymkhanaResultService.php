@@ -79,7 +79,49 @@ class GymkhanaResultService
         $gymkhanaResult->judges()->attach($gymkhana->judges->pluck('id'));
     }
 
-    public function update(int $id, array $data) {}
+    public function update(int $id, array $data)
+    {
+        $gymkhanaResult = GymkhanaResult::findOrFail($id);
+
+        $user = Auth::user();
+        $userType = $user->type;
+
+        $newResults = $data['results'];
+
+        $currentResults = $gymkhanaResult->results ?? [];
+
+        foreach ($newResults as $teamId => $teamResults) {
+            foreach ($teamResults as $phaseId => $phaseResults) {
+                $phase = collect($gymkhanaResult->phases)->firstWhere('id', $phaseId);
+
+                if (!$phase) {
+                    continue;
+                }
+
+                if ($userType === User::TYPE_JUDGE && $phase['type'] !== 1) {
+                    continue;
+                }
+
+                if ($userType === User::TYPE_ADMIN) {
+                    $currentResults[$teamId][$phaseId] = $phaseResults;
+                    continue;
+                }
+
+                if ($userType === User::TYPE_JUDGE && $phase['type'] === 1) {
+                    if (!isset($currentResults[$teamId][$phaseId]) || !is_array($currentResults[$teamId][$phaseId])) {
+                        $currentResults[$teamId][$phaseId] = [];
+                    }
+
+                    foreach ($phaseResults as $criterionIndex => $score) {
+                        $currentResults[$teamId][$phaseId][$criterionIndex] = $score;
+                    }
+                }
+            }
+        }
+
+        $gymkhanaResult->results = $currentResults;
+        $gymkhanaResult->save();
+    }
 
     public function deleteResult(int $id)
     {

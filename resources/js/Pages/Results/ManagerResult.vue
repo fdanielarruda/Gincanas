@@ -77,10 +77,6 @@ if (props.teams && props.phases) {
     });
 }
 
-const form = useForm({
-    results: initialResults,
-});
-
 const calculateTotalScore = (teamId: number) => {
     let total = 0;
     const teamResults = form.results[teamId];
@@ -116,11 +112,25 @@ const calculateTotalScore = (teamId: number) => {
     return total;
 };
 
-const submit = () => { };
-
 const currentPhase = computed(() => {
     return props.phases.find(p => p.id === state.activePhase);
 });
+
+const form = useForm({
+    results: initialResults,
+});
+
+const submit = () => {
+    form.put(route('results.update', { id: props.id }), {
+        onSuccess: () => {
+            console.log('Resultados salvos com sucesso!');
+        },
+        onError: (errors) => {
+            console.log('Erro ao salvar resultados:', errors);
+        }
+    });
+};
+
 </script>
 
 <template>
