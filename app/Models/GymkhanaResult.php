@@ -13,13 +13,15 @@ class GymkhanaResult extends Model
         'gymkhana_id',
         'teams',
         'phases',
-        'results'
+        'results',
+        'points'
     ];
 
     protected $casts = [
         'teams' => 'array',
         'phases' => 'array',
-        'results' => 'array'
+        'results' => 'array',
+        'points' => 'array'
     ];
 
     public function gymkhana()

@@ -76,7 +76,7 @@ Route::middleware(['auth'])
                 Route::get('/cadastrar', 'create')->name('create');
                 Route::post('/', 'store')->name('store');
                 Route::get('/{id}/gerenciar', 'manager')->name('manager');
-                Route::put('/{id}', 'update')->name('results.update');
+                Route::put('/{id}', 'update')->name('update');
                 Route::delete('/{id}', 'destroy')->name('destroy');
             });
     });

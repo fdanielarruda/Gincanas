@@ -17,6 +17,7 @@ return new class extends Migration
             $table->json('teams')->nullable();
             $table->json('phases')->nullable();
             $table->json('results')->nullable();
+            $table->json('points')->nullable();
             $table->timestamps();
         });
     }

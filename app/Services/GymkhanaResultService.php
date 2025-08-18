@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Gymkhana;
 use App\Models\GymkhanaResult;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class GymkhanaResultService
 {
@@ -12,7 +14,7 @@ class GymkhanaResultService
         return GymkhanaResult::with('gymkhana')
             ->get();
     }
-    
+
     public function find(int $id)
     {
         return GymkhanaResult::with('gymkhana')
@@ -24,6 +26,30 @@ class GymkhanaResultService
         return Gymkhana::where('is_active', true)
             ->orderBy('title')
             ->get(['id', 'title']);
+    }
+
+    public function getResultToManager(int $id)
+    {
+        $result = GymkhanaResult::findOrFail($id);
+        $user = Auth::user();
+
+        $allPhases = collect($result->phases);
+        $filteredPhases = collect([]);
+
+        if ($user && $user->type == User::TYPE_JUDGE) {
+            $filteredPhases = $allPhases->filter(fn($phase) => $phase['type'] === 1);
+        }
+
+        if ($user && $user->type == User::TYPE_ADMIN) {
+            $filteredPhases = $allPhases->filter(fn($phase) => $phase['type'] !== 1);
+        }
+
+        return [
+            'id' => $result->id,
+            'teams' => $result->teams,
+            'phases' => $filteredPhases->values()->toArray(),
+            'results' => $result->results
+        ];
     }
 
     public function createResult(array $data)
@@ -53,11 +79,7 @@ class GymkhanaResultService
         $gymkhanaResult->judges()->attach($gymkhana->judges->pluck('id'));
     }
 
-    public function update(int $id, array $data)
-    {
-        $result = GymkhanaResult::findOrFail($id);
-        $result->update($data);
-    }
+    public function update(int $id, array $data) {}
 
     public function deleteResult(int $id)
     {

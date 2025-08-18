@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GymkhanaResults\ResultStoreRequest;
+use App\Http\Requests\GymkhanaResults\ResultUpdateRequest;
 use App\Services\GymkhanaResultService;
 use Inertia\Inertia;
 
@@ -41,11 +42,9 @@ class GymkhanaResultController extends Controller
 
     public function manager(int $id)
     {
-        $result = $this->service->find($id);
+        $data = $this->service->getResultToManager($id);
 
-        return Inertia::render('Results/ManagerResult', [
-            'result' => $result
-        ]);
+        return Inertia::render('Results/ManagerResult', $data);
     }
 
     public function update(ResultUpdateRequest $request, int $id)

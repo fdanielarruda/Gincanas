@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { reactive } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import TextButton from '@/Components/Itens/TextButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
@@ -8,7 +8,6 @@ import TableColocation from './TableColocation.vue';
 import TableChecklist from './TableChecklist.vue';
 import TableDefault from './TableDefault.vue';
 
-// Constantes para os tipos de fases
 const TYPE_CRITERIA = 1;
 const TYPE_COLOCATION = 3;
 const TYPE_CHECKLIST = 4;
@@ -39,42 +38,38 @@ interface ResultData {
     };
 }
 
-interface GymkhanaResult {
+const props = defineProps<{
     id: number;
     teams: Team[];
     phases: Phase[];
     results: ResultData | null;
-}
-
-const props = defineProps<{
-    result: GymkhanaResult;
 }>();
 
 const state = reactive({
-    activePhase: props.result.phases[0] ? props.result.phases[0].id : null,
+    activePhase: props.phases[0] ? props.phases[0].id : null,
 });
 
 const initialResults = {};
-if (props.result.teams && props.result.phases) {
-    props.result.teams.forEach(team => {
+if (props.teams && props.phases) {
+    props.teams.forEach(team => {
         initialResults[team.id] = {};
-        props.result.phases.forEach(phase => {
+        props.phases.forEach(phase => {
             if (phase.type === TYPE_CRITERIA) {
                 const initialPhaseResults = {};
                 phase.criteria?.forEach((criterion, index) => {
-                    const existingValue = props.result.results?.[team.id]?.[phase.id]?.[index];
+                    const existingValue = props.results?.[team.id]?.[phase.id]?.[index];
                     initialPhaseResults[index] = existingValue !== undefined ? existingValue : null;
                 });
                 initialResults[team.id][phase.id] = initialPhaseResults;
             } else if (phase.type === TYPE_CHECKLIST) {
                 const initialPhaseResults = {};
                 phase.colocations?.forEach(colocation => {
-                    const existingValue = props.result.results?.[team.id]?.[phase.id]?.[colocation.place];
+                    const existingValue = props.results?.[team.id]?.[phase.id]?.[colocation.place];
                     initialPhaseResults[colocation.place] = existingValue !== undefined ? existingValue : null;
                 });
                 initialResults[team.id][phase.id] = initialPhaseResults;
             } else {
-                const existingValue = props.result.results?.[team.id]?.[phase.id];
+                const existingValue = props.results?.[team.id]?.[phase.id];
                 initialResults[team.id][phase.id] = existingValue !== undefined ? existingValue : null;
             }
         });
@@ -89,7 +84,7 @@ const calculateTotalScore = (teamId: number) => {
     let total = 0;
     if (form.results && form.results[teamId]) {
         for (const phaseId in form.results[teamId]) {
-            const phase = props.result.phases.find(p => p.id === Number(phaseId));
+            const phase = props.phases.find(p => p.id === Number(phaseId));
             if (!phase) continue;
 
             const phaseResult = form.results[teamId][phaseId];
@@ -115,17 +110,14 @@ const calculateTotalScore = (teamId: number) => {
 };
 
 const submit = () => {
-    form.put(route('results.update', props.result.id), {
-        onSuccess: () => {
-            // ...
-        },
-    });
+
 };
 
-const activePhase = () => props.result.phases.find(p => p.id === state.activePhase);
+const activePhase = () => props.phases.find(p => p.id === state.activePhase);
 </script>
 
 <template>
+
     <Head title="Gerenciar Resultados" />
 
     <AuthenticatedLayout>
@@ -136,33 +128,35 @@ const activePhase = () => props.result.phases.find(p => p.id === state.activePha
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
                             Gerenciar Resultados da Gincana
                         </h2>
-                        
-                        <div v-if="props.result.phases.length > 0">
+
+                        <div v-if="props.phases.length > 0">
                             <div class="flex space-x-2 mb-6">
-                                <button
-                                    v-for="phase in props.result.phases"
-                                    :key="phase.id"
-                                    @click="state.activePhase = phase.id"
-                                    :class="[
+                                <button v-for="phase in props.phases" :key="phase.id"
+                                    @click="state.activePhase = phase.id" :class="[
                                         'px-4 py-2 rounded-md transition-colors duration-200',
                                         state.activePhase === phase.id ? 'bg-indigo-600 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
-                                    ]"
-                                >
+                                    ]">
                                     {{ phase.title }}
                                 </button>
                             </div>
-                            
+
                             <form @submit.prevent="submit">
                                 <div v-if="activePhase()">
-                                    <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">{{ activePhase().title }}</h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{{ activePhase().description }}</p>
+                                    <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">{{
+                                        activePhase().title }}</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{{
+                                        activePhase().description }}</p>
 
-                                    <TableCriteria v-if="activePhase().type === TYPE_CRITERIA" :phase="activePhase()" :teams="props.result.teams" :form="form" />
-                                    <TableColocation v-else-if="activePhase().type === TYPE_COLOCATION" :phase="activePhase()" :teams="props.result.teams" :form="form" />
-                                    <TableChecklist v-else-if="activePhase().type === TYPE_CHECKLIST" :phase="activePhase()" :teams="props.result.teams" :form="form" />
-                                    <TableDefault v-else :phase="activePhase()" :teams="props.result.teams" :form="form" :calculateTotalScore="calculateTotalScore" />
+                                    <TableCriteria v-if="activePhase().type === TYPE_CRITERIA" :phase="activePhase()"
+                                        :teams="props.teams" :form="form" />
+                                    <TableColocation v-else-if="activePhase().type === TYPE_COLOCATION"
+                                        :phase="activePhase()" :teams="props.teams" :form="form" />
+                                    <TableChecklist v-else-if="activePhase().type === TYPE_CHECKLIST"
+                                        :phase="activePhase()" :teams="props.teams" :form="form" />
+                                    <TableDefault v-else :phase="activePhase()" :teams="props.teams" :form="form"
+                                        :calculateTotalScore="calculateTotalScore" />
                                 </div>
-                                
+
                                 <div class="flex items-center justify-end mt-6">
                                     <TextButton :disabled="form.processing" class="p-4">
                                         Salvar Resultados
@@ -170,9 +164,10 @@ const activePhase = () => props.result.phases.find(p => p.id === state.activePha
                                 </div>
                             </form>
                         </div>
-                        
+
                         <div v-else class="text-center text-gray-500 dark:text-gray-400">
-                            <p>Esta gincana não possui fases ou equipes cadastradas para gerenciamento de resultados.</p>
+                            <p>Esta gincana não possui fases ou equipes cadastradas para gerenciamento de resultados.
+                            </p>
                         </div>
                     </div>
                 </div>
