@@ -41,14 +41,21 @@ class GymkhanaResultService
         }
 
         if ($user && $user->type == User::TYPE_ADMIN) {
-            $filteredPhases = $allPhases->filter(fn($phase) => $phase['type'] !== 1);
+            // Agora, para administradores, você precisa de todas as fases.
+            // O filtro original estava removendo a fase 1, o que não é o comportamento desejado.
+            // Um administrador deve ver todas as fases.
+            $filteredPhases = $allPhases;
         }
 
+        // Adicione a lista de juízes e o tipo de usuário no retorno
         return [
             'id' => $result->id,
             'teams' => $result->teams,
             'phases' => $filteredPhases->values()->toArray(),
-            'results' => $result->results
+            'results' => $result->results,
+            'user_id' => $user->id,
+            'user_type' => $user->type,
+            'judges' => $result->judges, // Relacionamento com os juízes da gincana
         ];
     }
 
@@ -108,13 +115,8 @@ class GymkhanaResultService
                 }
 
                 if ($userType === User::TYPE_JUDGE && $phase['type'] === 1) {
-                    if (!isset($currentResults[$teamId][$phaseId]) || !is_array($currentResults[$teamId][$phaseId])) {
-                        $currentResults[$teamId][$phaseId] = [];
-                    }
-
-                    foreach ($phaseResults as $criterionIndex => $score) {
-                        $currentResults[$teamId][$phaseId][$criterionIndex] = $score;
-                    }
+                    $judgeId = $user->id;
+                    $currentResults[$teamId][$phaseId][$judgeId] = $phaseResults[$judgeId];
                 }
             }
         }

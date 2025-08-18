@@ -7,10 +7,13 @@ import TableCriteria from './TableCriteria.vue';
 import TableColocation from './TableColocation.vue';
 import TableChecklist from './TableChecklist.vue';
 import TableDefault from './TableDefault.vue';
+import TableCriteriaResults from './TableCriteriaResults.vue';
 
 const TYPE_CRITERIA = 1;
 const TYPE_COLOCATION = 3;
 const TYPE_CHECKLIST = 4;
+const USER_TYPE_ADMIN = 1;
+const USER_TYPE_JUDGE = 2;
 
 interface Team {
     id: number;
@@ -32,9 +35,14 @@ interface Phase {
     description: string;
 }
 
+interface Judge {
+    id: number;
+    name: string;
+}
+
 interface ResultData {
     [teamId: number]: {
-        [phaseId: number]: number | { [criterionIndex: number]: number } | { [colocationPlace: string]: number };
+        [phaseId: number]: any;
     };
 }
 
@@ -43,6 +51,9 @@ const props = defineProps<{
     teams: Team[];
     phases: Phase[];
     results: ResultData | null;
+    user_id: number;
+    user_type: number;
+    judges: Judge[];
 }>();
 
 const state = reactive({
@@ -50,18 +61,19 @@ const state = reactive({
 });
 
 const initialResults: { [key: number]: any } = {};
+const judgeId = props.user_id;
 
 if (props.teams && props.phases) {
     props.teams.forEach(team => {
         initialResults[team.id] = {};
         props.phases.forEach(phase => {
             if (phase.type === TYPE_CRITERIA) {
-                const initialPhaseResults: { [key: number]: number | null } = {};
-                phase.criteria?.forEach((criterion, index) => {
-                    const existingValue = (props.results?.[team.id]?.[phase.id] as { [key: number]: number })?.[index];
-                    initialPhaseResults[index] = existingValue !== undefined ? existingValue : null;
-                });
-                initialResults[team.id][phase.id] = initialPhaseResults;
+                if (props.user_type === USER_TYPE_ADMIN) {
+                    initialResults[team.id][phase.id] = props.results?.[team.id]?.[phase.id] || {};
+                } else {
+                    const existingValues = props.results?.[team.id]?.[phase.id]?.[judgeId];
+                    initialResults[team.id][phase.id] = { [judgeId]: existingValues || Array(phase.criteria?.length).fill(null) };
+                }
             } else if (phase.type === TYPE_CHECKLIST) {
                 const initialPhaseResults: { [key: string]: number | null } = {};
                 phase.colocations?.forEach(colocation => {
@@ -90,8 +102,13 @@ const calculateTotalScore = (teamId: number) => {
 
             if (phase.type === TYPE_CRITERIA) {
                 if (typeof phaseResult === 'object' && phaseResult !== null) {
-                    for (const criterionIndex in phaseResult) {
-                        total += Number(phaseResult[criterionIndex]) || 0;
+                    for (const judgeId in phaseResult) {
+                        const judgeScores = phaseResult[judgeId];
+                        if (Array.isArray(judgeScores)) {
+                            for (const score of judgeScores) {
+                                total += Number(score) || 0;
+                            }
+                        }
                     }
                 }
             } else if (phase.type === TYPE_CHECKLIST && phase.colocations) {
@@ -130,7 +147,6 @@ const submit = () => {
         }
     });
 };
-
 </script>
 
 <template>
@@ -166,12 +182,22 @@ const submit = () => {
                                         {{ currentPhase.description }}
                                     </p>
 
-                                    <TableCriteria v-if="currentPhase.type === TYPE_CRITERIA" :phase="currentPhase"
-                                        :teams="props.teams" :form="form" />
+                                    <TableCriteria
+                                        v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_JUDGE"
+                                        :phase="currentPhase" :teams="props.teams" :form="form" :user_id="props.user_id"
+                                        :user_type="props.user_type" :judges="props.judges" />
+
+                                    <TableCriteriaResults
+                                        v-else-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_ADMIN"
+                                        :phase="currentPhase" :teams="props.teams" :results="results"
+                                        :judges="props.judges" />
+
                                     <TableColocation v-else-if="currentPhase.type === TYPE_COLOCATION"
                                         :phase="currentPhase" :teams="props.teams" :form="form" />
+
                                     <TableChecklist v-else-if="currentPhase.type === TYPE_CHECKLIST"
                                         :phase="currentPhase" :teams="props.teams" :form="form" />
+
                                     <TableDefault v-else :phase="currentPhase" :teams="props.teams" :form="form"
                                         :calculateTotalScore="calculateTotalScore" />
                                 </div>
