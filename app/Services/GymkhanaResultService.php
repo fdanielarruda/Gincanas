@@ -41,13 +41,9 @@ class GymkhanaResultService
         }
 
         if ($user && $user->type == User::TYPE_ADMIN) {
-            // Agora, para administradores, você precisa de todas as fases.
-            // O filtro original estava removendo a fase 1, o que não é o comportamento desejado.
-            // Um administrador deve ver todas as fases.
             $filteredPhases = $allPhases;
         }
 
-        // Adicione a lista de juízes e o tipo de usuário no retorno
         return [
             'id' => $result->id,
             'teams' => $result->teams,
@@ -55,7 +51,7 @@ class GymkhanaResultService
             'results' => $result->results,
             'user_id' => $user->id,
             'user_type' => $user->type,
-            'judges' => $result->judges, // Relacionamento com os juízes da gincana
+            'judges' => $result->judges,
         ];
     }
 

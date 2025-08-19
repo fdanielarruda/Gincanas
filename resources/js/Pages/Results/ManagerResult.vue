@@ -12,6 +12,7 @@ import TableCriteriaResults from './TableCriteriaResults.vue';
 const TYPE_CRITERIA = 1;
 const TYPE_COLOCATION = 3;
 const TYPE_CHECKLIST = 4;
+
 const USER_TYPE_ADMIN = 1;
 const USER_TYPE_JUDGE = 2;
 
@@ -158,7 +159,7 @@ const submit = () => {
             <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div class="flex justify-end items-center mb-4">
+                        <div v-if="props.user_type === USER_TYPE_ADMIN" class="flex justify-end items-center mb-4">
                             <TextButton :href="route('ranking.generate', { 'result_id': props.id })" class="p-4">
                                 Ver Classificação
                             </TextButton>
@@ -173,7 +174,7 @@ const submit = () => {
                                 <button v-for="phase in props.phases" :key="phase.id"
                                     @click="state.activePhase = phase.id" :class="[
                                         'px-4 py-2 rounded-md transition-colors duration-200',
-                                        state.activePhase === phase.id ? 'bg-indigo-600 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
+                                        state.activePhase === phase.id ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
                                     ]">
                                     {{ phase.title }}
                                 </button>

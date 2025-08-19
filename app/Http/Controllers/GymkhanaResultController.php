@@ -7,6 +7,7 @@ use App\Http\Requests\GymkhanaResults\ResultRankingRequest;
 use App\Http\Requests\GymkhanaResults\ResultStoreRequest;
 use App\Http\Requests\GymkhanaResults\ResultUpdateRequest;
 use App\Services\GymkhanaResultService;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class GymkhanaResultController extends Controller
@@ -18,9 +19,11 @@ class GymkhanaResultController extends Controller
     public function index()
     {
         $results = $this->service->list();
+        $user = Auth::user();
 
         return Inertia::render('Results/Index', [
-            'results' => $results
+            'results' => $results,
+            'user_type' => $user->type
         ]);
     }
 
