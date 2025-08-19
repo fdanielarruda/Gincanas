@@ -22,7 +22,7 @@ class ResultRankingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'result_id' => ['required', 'exists:gymkhana_results,id']
+            'result_id' => ['required']
         ];
     }
 }
