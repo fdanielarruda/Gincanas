@@ -30,7 +30,7 @@ const form = useForm({
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-3">
             <div>
                 <InputLabel for="name" value="Nome" />
 

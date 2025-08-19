@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GymkhanaResults\ResultRankingRequest;
 use App\Http\Requests\GymkhanaResults\ResultStoreRequest;
 use App\Http\Requests\GymkhanaResults\ResultUpdateRequest;
 use App\Services\GymkhanaResultService;
@@ -54,9 +55,9 @@ class GymkhanaResultController extends Controller
         return redirect()->back()->with('success', 'Resultados atualizados com sucesso!');
     }
 
-    public function ranking(int $id)
+    public function ranking(ResultRankingRequest $request)
     {
-        $data = $this->service->makeRanking($id);
+        $data = $this->service->makeRanking($request->result_id);
 
         return Inertia::render('Results/Ranking', $data);
     }

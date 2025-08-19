@@ -159,7 +159,7 @@ const submit = () => {
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
                         <div class="flex justify-end items-center mb-4">
-                            <TextButton :href="route('results.ranking', props.id)" class="p-4">
+                            <TextButton :href="route('ranking.generate', { 'result_id': props.id })" class="p-4">
                                 Ver Classificação
                             </TextButton>
                         </div>

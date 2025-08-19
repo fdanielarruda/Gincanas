@@ -37,15 +37,15 @@ const submit = () => {
 
 <template>
     <form @submit.prevent="submit">
-        <div class="space-y-6">
+        <div class="space-y-3">
             <div>
-                <InputLabel for="name" value="Nome do Usuário" />
+                <InputLabel for="name" value="Nome do Juiz" />
                 <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
             <div>
-                <InputLabel for="email" value="E-mail do Usuário" />
+                <InputLabel for="email" value="E-mail do Juiz" />
                 <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required />
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>

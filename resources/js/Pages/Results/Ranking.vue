@@ -85,7 +85,6 @@ const rankedTeams = computed(() => {
         totalScore: calculateTeamTotalScore(team.id),
     }));
 
-    // Ordena as equipes por pontuação total em ordem decrescente
     return teamsWithScores.sort((a, b) => b.totalScore - a.totalScore);
 });
 
@@ -99,12 +98,6 @@ const rankedTeams = computed(() => {
             <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div class="flex justify-end items-center mb-4">
-                            <TextButton :href="route('results.manager', props.id)" class="p-4">
-                                Resultados
-                            </TextButton>
-                        </div>
-
                         <h2 class="text-xl font-bold mb-4">Classificação Geral - {{ props.gincana.title }}</h2>
                         <div v-if="rankedTeams.length > 0">
                             <table class="w-full text-left table-auto">

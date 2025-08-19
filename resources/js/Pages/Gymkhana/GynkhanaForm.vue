@@ -33,7 +33,7 @@ const submit = () => {
 
 <template>
     <form @submit.prevent="submit">
-        <div class="space-y-6">
+        <div class="space-y-3">
             <div>
                 <InputLabel for="title" value="Título da Gincana" />
                 <TextInput id="title" type="text" class="mt-1 block w-full" v-model="form.title" required autofocus />

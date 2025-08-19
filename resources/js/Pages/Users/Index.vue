@@ -41,7 +41,7 @@ const {
                     <div class="p-6 text-gray-900 dark:text-gray-100">
                         <div class="flex justify-end mb-4">
                             <TextButton :href="route('users.create')">
-                                Novo Usuário
+                                Novo Juiz
                             </TextButton>
                         </div>
 
@@ -82,7 +82,7 @@ const {
                                                 title="Editar">
                                                 <PencilSquareIcon class="h-5 w-5" />
                                             </IconButton>
-                                            <IconButton as="button" color="red" title="Deletar" class="ml-2"
+                                            <IconButton as="button" color="red" title="Deletar" class="ml-1"
                                                 @click="openConfirmModal(user)">
                                                 <TrashIcon class="h-5 w-5" />
                                             </IconButton>

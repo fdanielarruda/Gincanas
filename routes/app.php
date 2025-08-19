@@ -77,7 +77,6 @@ Route::middleware(['auth'])
                 Route::post('/', 'store')->name('store');
                 Route::get('/{id}/gerenciar', 'manager')->name('manager');
                 Route::put('/{id}', 'update')->name('update');
-                Route::get('/{id}/ranking', 'ranking')->name('ranking');
                 Route::delete('/{id}', 'destroy')->name('destroy');
             });
     });
