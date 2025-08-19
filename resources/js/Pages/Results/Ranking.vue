@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import TextButton from '@/Components/Itens/TextButton.vue';
+import ExternalLayout from '@/Layouts/ExternalLayout.vue';
 
 interface Team {
     id: number;
@@ -93,7 +92,8 @@ const rankedTeams = computed(() => {
 <template>
 
     <Head :title="`Classificação - ${props.gincana.title}`" />
-    <AuthenticatedLayout>
+
+    <ExternalLayout>
         <div class="py-12">
             <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -125,5 +125,5 @@ const rankedTeams = computed(() => {
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </ExternalLayout>
 </template>
