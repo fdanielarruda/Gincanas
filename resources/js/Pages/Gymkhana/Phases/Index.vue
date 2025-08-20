@@ -71,9 +71,6 @@ const removePhase = performDeletion;
                                     <tr>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                                            ID</th>
-                                        <th scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                                             Título</th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
@@ -87,10 +84,14 @@ const removePhase = performDeletion;
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                                     <tr v-for="phase in gymkhana.phases" :key="phase.id">
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ phase.id }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ phase.title }}</td>
-                                        <td class="px-6 py-4">{{ phase.description }}</td>
-                                        <td class="px-6 py-4">
+                                        <td class="px-6 py-4 whitespace-normal">
+                                            <div class="flex flex-col">
+                                                <span class="font-bold">{{ phase.title }}</span>
+                                                <span class="text-sm text-gray-600 dark:text-gray-400">{{
+                                                    phase.description }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
                                             <div v-if="phase.type == TYPE_CRITERIA">
                                                 <ul v-if="phase.criteria && phase.criteria.length > 0"
                                                     class="list-disc list-inside">
@@ -100,7 +101,8 @@ const removePhase = performDeletion;
                                                 </ul>
                                                 <span v-else>Nenhum critério</span>
                                             </div>
-                                            <div v-else-if="phase.type == TYPE_COLOCATION || phase.type == TYPE_CHECKLIST">
+                                            <div
+                                                v-else-if="phase.type == TYPE_COLOCATION || phase.type == TYPE_CHECKLIST">
                                                 <ul v-if="phase.colocations && phase.colocations.length > 0"
                                                     class="list-disc list-inside">
                                                     <li v-for="(colocation, index) in phase.colocations" :key="index">
