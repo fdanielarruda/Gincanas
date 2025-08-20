@@ -5,6 +5,38 @@ export interface User {
     name: string;
     email: string;
     email_verified_at?: string;
+    type: number;
+}
+
+interface Phase {
+    id: number;
+    title: string;
+    type: number;
+    criteria: string[] | null;
+    colocations: Colocation[] | null;
+    description: string;
+}
+
+interface Team {
+    id: number;
+    title: string;
+    participants: string[];
+}
+
+interface Judge {
+    id: number;
+    name: string;
+}
+
+interface Colocation {
+    place: string;
+    points: number;
+}
+
+export interface ResultData {
+    [teamId: number]: {
+        [phaseId: number]: any;
+    };
 }
 
 export type PageProps<

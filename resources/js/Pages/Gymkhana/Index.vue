@@ -4,7 +4,7 @@ import IconButton from '@/Components/Itens/IconButton.vue';
 import TextButton from '@/Components/Itens/TextButton.vue';
 import ConfirmDeletionModal from '@/Components/ConfirmDeletionModal.vue';
 import { useDeleter } from '@/Composables/useDeleter';
-import { formatDateForDisplay } from '@/Utils/DateUtils';
+import { formatDateForDisplay } from '@/Utils/dateUtils';
 import { Head } from '@inertiajs/vue3';
 import { PencilSquareIcon, RectangleStackIcon, ShieldCheckIcon, TrashIcon, UserGroupIcon } from '@heroicons/vue/24/solid';
 

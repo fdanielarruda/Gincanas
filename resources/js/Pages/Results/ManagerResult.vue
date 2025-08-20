@@ -8,6 +8,7 @@ import TableColocation from './TableColocation.vue';
 import TableChecklist from './TableChecklist.vue';
 import TableDefault from './TableDefault.vue';
 import TableCriteriaResults from './TableCriteriaResults.vue';
+import { calculateTeamTotalScore } from '@/Utils/scoreCalculator';
 
 const TYPE_CRITERIA = 1;
 const TYPE_COLOCATION = 3;
@@ -90,46 +91,6 @@ if (props.teams && props.phases) {
     });
 }
 
-const calculateTotalScore = (teamId: number) => {
-    let total = 0;
-    const teamResults = form.results[teamId];
-
-    if (teamResults) {
-        for (const phaseId in teamResults) {
-            const phase = props.phases.find(p => p.id === Number(phaseId));
-            if (!phase) continue;
-
-            const phaseResult = teamResults[phaseId];
-
-            if (phase.type === TYPE_CRITERIA) {
-                if (typeof phaseResult === 'object' && phaseResult !== null) {
-                    for (const judgeId in phaseResult) {
-                        const judgeScores = phaseResult[judgeId];
-                        if (Array.isArray(judgeScores)) {
-                            for (const score of judgeScores) {
-                                total += Number(score) || 0;
-                            }
-                        }
-                    }
-                }
-            } else if (phase.type === TYPE_CHECKLIST && phase.colocations) {
-                if (typeof phaseResult === 'object' && phaseResult !== null) {
-                    for (const colocationPlace in phaseResult) {
-                        const colocation = phase.colocations.find(c => c.place === colocationPlace);
-                        if (colocation) {
-                            const quantity = Number(phaseResult[colocationPlace]) || 0;
-                            total += quantity * colocation.points;
-                        }
-                    }
-                }
-            } else {
-                total += Number(phaseResult) || 0;
-            }
-        }
-    }
-    return total;
-};
-
 const currentPhase = computed(() => {
     return props.phases.find(p => p.id === state.activePhase);
 });
@@ -137,6 +98,10 @@ const currentPhase = computed(() => {
 const form = useForm({
     results: initialResults,
 });
+
+const calculateTotalScore = (teamId: number) => {
+    return calculateTeamTotalScore(teamId, props.phases, form.results);
+};
 
 const submit = () => {
     form.put(route('results.update', { id: props.id }), {

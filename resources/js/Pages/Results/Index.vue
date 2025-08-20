@@ -4,7 +4,7 @@ import IconButton from '@/Components/Itens/IconButton.vue';
 import { useDeleter } from '@/Composables/useDeleter';
 import TextButton from '@/Components/Itens/TextButton.vue';
 import ConfirmDeletionModal from '@/Components/ConfirmDeletionModal.vue';
-import { formatDateForDisplay } from '@/Utils/DateUtils';
+import { formatDateForDisplay } from '@/Utils/dateUtils';
 import { Head } from '@inertiajs/vue3';
 import { PlayCircleIcon, TrashIcon, TrophyIcon } from '@heroicons/vue/24/solid';
 

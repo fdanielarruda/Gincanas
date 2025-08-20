@@ -3,7 +3,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import TextButton from '@/Components/Itens/TextButton.vue';
-import { formatForInput } from '@/Utils/DateUtils';
+import { formatForInput } from '@/Utils/dateUtils';
 import { useForm } from '@inertiajs/vue3';
 import { defineProps, defineEmits } from 'vue';
 

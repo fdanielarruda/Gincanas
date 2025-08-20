@@ -3,11 +3,17 @@ import { ref, computed } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import ExternalLayout from '@/Layouts/ExternalLayout.vue';
 import { InformationCircleIcon } from '@heroicons/vue/24/solid';
+import { calculatePhaseScore, getRankedTeams } from '@/Utils/scoreCalculator';
 
 interface Team {
     id: number;
     title: string;
     participants: string[];
+}
+
+interface Colocation {
+    place: string;
+    points: number;
 }
 
 interface Phase {
@@ -16,7 +22,7 @@ interface Phase {
     type: number;
     criteria: string[] | null;
     description: string;
-    colocations?: { place: string, points: number }[];
+    colocations: Colocation[] | null;
 }
 
 interface ResultData {
@@ -37,68 +43,10 @@ const props = defineProps<{
     results: ResultData;
 }>();
 
-const TYPE_CRITERIA = 1;
-const TYPE_CHECKLIST = 4;
-
 const showPhaseScores = ref(false);
 
-const calculatePhaseScore = (teamId: number, phase: Phase) => {
-    let score = 0;
-    const teamResults = props.results[teamId];
-
-    if (!teamResults || !teamResults[phase.id]) {
-        return 0;
-    }
-
-    const phaseResult = teamResults[phase.id];
-
-    if (phase.type === TYPE_CRITERIA) {
-        if (typeof phaseResult === 'object' && phaseResult !== null) {
-            for (const judgeId in phaseResult) {
-                const judgeScores = phaseResult[judgeId];
-                if (Array.isArray(judgeScores)) {
-                    for (const s of judgeScores) {
-                        score += Number(s) || 0;
-                    }
-                }
-            }
-        }
-    } else if (phase.type === TYPE_CHECKLIST && phase.colocations) {
-        if (typeof phaseResult === 'object' && phaseResult !== null) {
-            for (const colocationPlace in phaseResult) {
-                const colocation = phase.colocations.find(c => c.place === colocationPlace);
-                if (colocation) {
-                    const quantity = Number(phaseResult[colocationPlace]) || 0;
-                    score += quantity * colocation.points;
-                }
-            }
-        }
-    } else {
-        score += Number(phaseResult) || 0;
-    }
-
-    return score;
-};
-
-const calculateTeamTotalScore = (teamId: number) => {
-    let total = 0;
-    const teamResults = props.results[teamId];
-
-    if (teamResults) {
-        for (const phase of props.phases) {
-            total += calculatePhaseScore(teamId, phase);
-        }
-    }
-    return total;
-};
-
 const rankedTeams = computed(() => {
-    const teamsWithScores = props.teams.map(team => ({
-        ...team,
-        totalScore: calculateTeamTotalScore(team.id),
-    }));
-
-    return teamsWithScores.sort((a, b) => b.totalScore - a.totalScore);
+    return getRankedTeams(props.teams, props.phases, props.results);
 });
 </script>
 
@@ -170,7 +118,8 @@ const rankedTeams = computed(() => {
 
                                             <template v-if="showPhaseScores" v-for="phase in props.phases"
                                                 :key="`row-${team.id}-${phase.id}`">
-                                                <td class="py-2 px-4 text-right">{{ calculatePhaseScore(team.id, phase)
+                                                <td class="py-2 px-4 text-right">{{ calculatePhaseScore(team.id, phase,
+                                                    props.results)
                                                     }}
                                                 </td>
                                             </template>
