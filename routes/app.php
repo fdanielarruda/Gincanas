@@ -13,6 +13,7 @@ Route::middleware(['auth'])
         Route::prefix('juizes')
             ->name('users.')
             ->controller(UserController::class)
+            ->middleware(['admin'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/cadastrar', 'create')->name('create');
@@ -25,6 +26,7 @@ Route::middleware(['auth'])
         Route::prefix('gincanas')
             ->name('gymkhana.')
             ->controller(GymkhanaController::class)
+            ->middleware(['admin'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/cadastrar', 'create')->name('create');
@@ -37,6 +39,7 @@ Route::middleware(['auth'])
         Route::prefix('gincanas/{gymkhana_id}/equipes')
             ->name('gymkhana.teams.')
             ->controller(TeamController::class)
+            ->middleware(['admin'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/cadastrar', 'create')->name('create');
@@ -49,6 +52,7 @@ Route::middleware(['auth'])
         Route::prefix('gincanas/{gymkhana_id}/fases')
             ->name('gymkhana.phases.')
             ->controller(PhaseController::class)
+            ->middleware(['admin'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/cadastrar', 'create')->name('create');
@@ -61,6 +65,7 @@ Route::middleware(['auth'])
         Route::prefix('gincanas/{gymkhana_id}/juizes')
             ->name('gymkhana.judges.')
             ->controller(JudgeController::class)
+            ->middleware(['admin'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/cadastrar', 'create')->name('create');
@@ -73,10 +78,10 @@ Route::middleware(['auth'])
             ->controller(GymkhanaResultController::class)
             ->group(function () {
                 Route::get('/', 'index')->name('index');
-                Route::get('/cadastrar', 'create')->name('create');
-                Route::post('/', 'store')->name('store');
+                Route::get('/cadastrar', 'create')->name('create')->middleware(['admin']);
+                Route::post('/', 'store')->name('store')->middleware(['admin']);
                 Route::get('/{id}/gerenciar', 'manager')->name('manager');
                 Route::put('/{id}', 'update')->name('update');
-                Route::delete('/{id}', 'destroy')->name('destroy');
+                Route::delete('/{id}', 'destroy')->name('destroy')->middleware(['admin']);
             });
     });
