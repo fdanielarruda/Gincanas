@@ -31,7 +31,7 @@ const emit = defineEmits<{
             <select
                 id="gymkhana_id"
                 v-model="form.gymkhana_id"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white dark:bg-gray-800"
                 required
             >
                 <option :value="null" disabled>Selecione uma gincana</option>

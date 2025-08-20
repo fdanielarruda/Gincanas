@@ -74,7 +74,7 @@ const {
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                                     <tr v-for="result in props.results" :key="result.id">
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-6 py-4 whitespace-normal">
                                             {{ result.gymkhana.title }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
