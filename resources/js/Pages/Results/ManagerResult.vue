@@ -166,7 +166,7 @@ const submit = () => {
                         </div>
 
                         <div v-if="props.phases.length > 0">
-                            <div class="flex space-x-2 mb-6">
+                            <div class="flex space-x-2 mb-6 overflow-x-auto">
                                 <button v-for="(phase, index) in props.phases" :key="phase.id"
                                     @click="state.activePhase = phase.id" :class="[
                                         'px-4 py-2 rounded-md transition-colors duration-200',
