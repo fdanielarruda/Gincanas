@@ -3,8 +3,20 @@ import { computed, ref, onMounted } from 'vue';
 import NavLink from '@/Components/NavLink.vue';
 import { SunIcon, MoonIcon, Bars3Icon, ChevronDownIcon } from '@heroicons/vue/24/solid';
 import { staticNavigationLinks } from '@/data/navigationLinks';
+import { usePage } from '@inertiajs/vue3';
+
+interface User {
+    id: number;
+    name: string;
+    email: string;
+    type: number;
+}
 
 const isDark = ref(false);
+const page = usePage();
+
+const authUser = computed<User | null>(() => page.props.auth.user as User | null);
+const isAdmin = computed(() => authUser.value && authUser.value.type == 1);
 
 function applyTheme(theme: string) {
     if (theme === 'dark') {
@@ -29,6 +41,11 @@ const filteredNavigationLinks = computed(() => {
         if (link.type === 'separator') {
             return true;
         }
+
+        if (link.justAdmin) {
+            return isAdmin.value;
+        }
+
         return true;
     });
 });

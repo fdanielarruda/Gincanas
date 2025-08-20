@@ -2,7 +2,6 @@ import {
     UserIcon,
     HomeIcon,
     ArrowLeftEndOnRectangleIcon,
-    UsersIcon,
     ShieldCheckIcon,
     TrophyIcon,
     ChartBarIcon,
@@ -19,6 +18,7 @@ interface NavigationLink {
     iconClass?: string;
     type?: 'link' | 'separator' | 'group';
     children?: NavigationLink[];
+    justAdmin?: boolean | false;
 }
 
 export const staticNavigationLinks: NavigationLink[] = [
@@ -33,12 +33,14 @@ export const staticNavigationLinks: NavigationLink[] = [
         icon: ShieldCheckIcon,
         route: 'users.index',
         type: 'link',
+        justAdmin: true,
     },
     {
         label: 'Gincanas',
         icon: TrophyIcon,
         route: 'gymkhana.index',
         type: 'link',
+        justAdmin: true,
     },
     {
         label: 'Resultados',

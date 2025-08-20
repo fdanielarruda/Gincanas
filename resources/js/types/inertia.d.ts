@@ -16,15 +16,8 @@ interface User {
     id: number;
     name: string;
     email: string;
+    type: number;
     // Adicione outras propriedades do usuário
-}
-
-// Defina a estrutura do seu Tenant (se você compartilhar)
-interface Tenant {
-    id: string;
-    name: string;
-    city: string;
-    // ... outras propriedades do tenant
 }
 
 // Combine todas as suas props personalizadas aqui
@@ -34,8 +27,6 @@ interface CustomPageProps extends PageProps {
         user: User;
     };
     flash: FlashMessages;
-    selectedTenantId?: string | null; // Adicione o tenantId se estiver compartilhando
-    tenants: Tenant[]; // Adicione se você compartilha a lista de tenants globalmente
     // Adicione qualquer outra prop que você compartilha globalmente via HandleInertiaRequests
 }
 
