@@ -52,9 +52,6 @@ const {
                                     <tr>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                                            ID</th>
-                                        <th scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                                             Título</th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
@@ -68,8 +65,7 @@ const {
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                                     <tr v-for="gymkhana in props.gymkhanas" :key="gymkhana.id">
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ gymkhana.id }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ gymkhana.title }}</td>
+                                        <td class="px-6 py-4 whitespace-normal">{{ gymkhana.title }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             {{ formatDateForDisplay(gymkhana.start_date) }}
                                         </td>
