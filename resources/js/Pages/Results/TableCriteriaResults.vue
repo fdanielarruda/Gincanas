@@ -92,7 +92,7 @@ const getTeamTotal = (teamId: number) => {
                                         {{ getJudgeScore(team.id, judge.id, criteriaIndex) }}
                                     </span>
                                 </td>
-                                <td class="py-4 px-6 text-center font-bold text-black dark:text-black">
+                                <td class="py-4 px-6 text-center font-bold text-black dark:text-white">
                                     {{ getCriteriaTotal(team.id, criteriaIndex) }}
                                 </td>
                             </tr>
@@ -101,7 +101,7 @@ const getTeamTotal = (teamId: number) => {
                             <tr>
                                 <th scope="row" class="py-3 px-6">Total da Equipe</th>
                                 <td :colspan="props.judges.length" class="py-3 px-6 text-center"></td>
-                                <td class="py-3 px-6 text-center text-black dark:text-black font-bold">
+                                <td class="py-3 px-6 text-center text-black dark:text-white font-bold">
                                     {{ getTeamTotal(team.id) }}
                                 </td>
                             </tr>
