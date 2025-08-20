@@ -165,18 +165,14 @@ const submit = () => {
                             </TextButton>
                         </div>
 
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-                            Gerenciar Resultados da Gincana
-                        </h2>
-
                         <div v-if="props.phases.length > 0">
                             <div class="flex space-x-2 mb-6">
-                                <button v-for="phase in props.phases" :key="phase.id"
+                                <button v-for="(phase, index) in props.phases" :key="phase.id"
                                     @click="state.activePhase = phase.id" :class="[
                                         'px-4 py-2 rounded-md transition-colors duration-200',
                                         state.activePhase === phase.id ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
-                                    ]">
-                                    {{ phase.title }}
+                                    ]" :title="phase.title">
+                                    Fase {{ index + 1 }}
                                 </button>
                             </div>
 
