@@ -27,11 +27,17 @@ class PhaseStoreRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'type' => ['required', 'integer', Rule::in(Phase::TYPES)],
-            'criteria' => ['nullable', 'array'],
+
+            'criteria' => ['nullable', Rule::requiredIf($this->type == Phase::TYPE_CRITERIA), 'array'],
             'criteria.*' => ['nullable', 'string', 'max:255'],
-            'colocations' => ['nullable', 'array'],
-            'colocations.*.place' => ['required_with:colocations', 'string'],
-            'colocations.*.points' => ['required_with:colocations', 'integer'],
+
+            'colocations' => ['nullable', Rule::requiredIf($this->type != Phase::TYPE_CRITERIA), 'array'],
+            'colocations.*.place' => [Rule::requiredIf($this->type != Phase::TYPE_CRITERIA), 'string'],
+            'colocations.*.points' => [Rule::requiredIf($this->type != Phase::TYPE_CRITERIA), 'integer'],
+
+            'checklist_colocations' => ['nullable', Rule::requiredIf($this->type == Phase::TYPE_CHECKLIST), 'array'],
+            'checklist_colocations.*.place' => [Rule::requiredIf($this->type != Phase::TYPE_CHECKLIST), 'string'],
+            'checklist_colocations.*.points' => [Rule::requiredIf($this->type != Phase::TYPE_CHECKLIST), 'integer'],
         ];
     }
 }

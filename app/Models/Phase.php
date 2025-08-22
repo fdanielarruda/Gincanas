@@ -27,12 +27,14 @@ class Phase extends Model
         'description',
         'type',
         'criteria',
-        'colocations'
+        'colocations',
+        'checklist_colocations'
     ];
 
     protected $casts = [
         'criteria' => 'array',
-        'colocations' => 'array'
+        'colocations' => 'array',
+        'checklist_colocations' => 'array'
     ];
 
     public function gymkhana()

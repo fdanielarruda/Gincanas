@@ -25,6 +25,7 @@ interface Phase {
     type: number;
     criteria: string[];
     colocations: { place: string, points: number }[];
+    checklist_colocations?: { place: string, points: number }[];
 }
 
 const props = defineProps<{
@@ -98,12 +99,20 @@ const removePhase = performDeletion;
                                                 </ul>
                                                 <span v-else>Nenhum critério</span>
                                             </div>
-                                            <div
-                                                v-else-if="phase.type == TYPE_COLOCATION || phase.type == TYPE_CHECKLIST">
+                                            <div v-else-if="phase.type == TYPE_COLOCATION">
                                                 <ul v-if="phase.colocations && phase.colocations.length > 0"
                                                     class="list-disc list-inside">
                                                     <li v-for="(colocation, index) in phase.colocations" :key="index">
                                                         {{ colocation.place }}: {{ colocation.points }} pts
+                                                    </li>
+                                                </ul>
+                                                <span v-else>Nenhuma colocação definida</span>
+                                            </div>
+                                            <div v-else-if="phase.type == TYPE_CHECKLIST">
+                                                <ul v-if="phase.checklist_colocations && phase.checklist_colocations.length > 0"
+                                                    class="list-disc list-inside">
+                                                    <li v-for="(checklist_colocations, index) in phase.checklist_colocations" :key="index">
+                                                        {{ checklist_colocations.place }}: {{ checklist_colocations.points }} pts
                                                     </li>
                                                 </ul>
                                                 <span v-else>Nenhuma colocação definida</span>

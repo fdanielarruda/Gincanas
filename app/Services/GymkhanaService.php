@@ -79,11 +79,16 @@ class GymkhanaService
         $gymkhana = Gymkhana::findOrFail($gymkhana_id);
 
         if (isset($data['type'])) {
-            if ((int) $data['type'] !== Phase::TYPE_CRITERIA) {
-                unset($data['criteria']);
-            }
-            if ((int) $data['type'] !== Phase::TYPE_COLOCATION && (int) $data['type'] !== Phase::TYPE_CHECKLIST) {
+            if ((int) $data['type'] === Phase::TYPE_CRITERIA) {
                 unset($data['colocations']);
+                unset($data['checklist_colocations']);
+            }
+            if ((int) $data['type'] === Phase::TYPE_COLOCATION) {
+                unset($data['criteria']);
+                unset($data['checklist_colocations']);
+            }
+            if ((int) $data['type'] === Phase::TYPE_CHECKLIST) {
+                unset($data['criteria']);
             }
         }
 
@@ -109,11 +114,16 @@ class GymkhanaService
         $phase = $gymkhana->phases()->findOrFail($phase_id);
 
         if (isset($data['type'])) {
-            if ((int) $data['type'] !== Phase::TYPE_CRITERIA) {
-                $data['criteria'] = null;
-            }
-            if ((int) $data['type'] !== Phase::TYPE_COLOCATION && (int) $data['type'] !== Phase::TYPE_CHECKLIST) {
+            if ((int) $data['type'] === Phase::TYPE_CRITERIA) {
                 $data['colocations'] = null;
+                $data['checklist_colocations'] = null;
+            }
+            if ((int) $data['type'] === Phase::TYPE_COLOCATION) {
+                $data['criteria'] = null;
+                $data['checklist_colocations'] = null;
+            }
+            if ((int) $data['type'] === Phase::TYPE_CHECKLIST) {
+                $data['criteria'] = null;
             }
         }
 

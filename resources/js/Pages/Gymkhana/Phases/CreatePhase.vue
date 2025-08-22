@@ -13,6 +13,7 @@ interface PhaseFormFields {
     type: number;
     criteria?: Array<string>;
     colocations?: Array<{ place: string, points: number }>;
+    checklist_colocations?: Array<{ place: string, points: number }>;
 }
 
 const props = defineProps<{
