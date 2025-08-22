@@ -5,6 +5,7 @@ import { defineProps } from 'vue';
 interface Team {
     id: number;
     title: string;
+    participants: string[];
 }
 
 interface Colocation {
@@ -14,19 +15,24 @@ interface Colocation {
 
 interface Phase {
     id: number;
+    title: string;
+    type: number;
+    criteria: string[] | null;
     colocations: Colocation[] | null;
+    checklist_colocations: Colocation[] | null;
+    description: string;
 }
 
 const props = defineProps<{
-    phase: Phase | undefined;
+    phase: Phase;
     teams: Team[];
     form: ReturnType<typeof useForm>;
 }>();
 
-const calculateTeamPhaseScore = (teamId: number) => {
+const calculateTeamPhaseScore = (teamId: number): number => {
     let total = 0;
-    if (props.phase.colocations) {
-        props.phase.colocations.forEach(colocation => {
+    if (props.phase.checklist_colocations) {
+        props.phase.checklist_colocations.forEach(colocation => {
             const quantity = props.form.results[teamId]?.[props.phase.id]?.[colocation.place] || 0;
             total += Number(quantity) * colocation.points;
         });
@@ -60,7 +66,7 @@ const calculateTeamPhaseScore = (teamId: number) => {
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        <tr v-for="colocation in phase.colocations" :key="colocation.place">
+                        <tr v-for="colocation in phase.checklist_colocations" :key="colocation.place">
                             <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">
                                 {{ colocation.place }} ({{ colocation.points }})
                             </td>

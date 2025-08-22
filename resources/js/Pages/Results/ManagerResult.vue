@@ -34,6 +34,7 @@ interface Phase {
     type: number;
     criteria: string[] | null;
     colocations: Colocation[] | null;
+    checklist_colocations: Colocation[] | null;
     description: string;
 }
 
@@ -156,18 +157,16 @@ const submit = () => {
                                         :user_type="props.user_type" :judges="props.judges" />
 
                                     <TableCriteriaResults
-                                        v-else-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_ADMIN"
+                                        v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_ADMIN"
                                         :phase="currentPhase" :teams="props.teams" :results="results"
                                         :judges="props.judges" />
 
-                                    <TableColocation v-else-if="currentPhase.type === TYPE_COLOCATION"
-                                        :phase="currentPhase" :teams="props.teams" :form="form" />
+                                    <TableChecklist v-if="currentPhase.type === TYPE_CHECKLIST" :phase="currentPhase"
+                                        :teams="props.teams" :form="form" />
 
-                                    <TableChecklist v-else-if="currentPhase.type === TYPE_CHECKLIST"
+                                    <TableColocation
+                                        v-if="currentPhase.type === TYPE_COLOCATION || currentPhase.type === TYPE_CHECKLIST"
                                         :phase="currentPhase" :teams="props.teams" :form="form" />
-
-                                    <TableDefault v-else :phase="currentPhase" :teams="props.teams" :form="form"
-                                        :calculateTotalScore="calculateTotalScore" />
                                 </div>
 
                                 <div class="flex items-center justify-end mt-6 space-x-4">

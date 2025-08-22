@@ -2,6 +2,8 @@
 import { useForm } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
 
+const TYPE_CHECKLIST = 4;
+
 interface Team {
     id: number;
     title: string;
@@ -15,6 +17,7 @@ interface Colocation {
 
 interface Phase {
     id: number;
+    type: number;
     colocations: Colocation[] | null;
 }
 
@@ -27,10 +30,15 @@ const props = defineProps<{
 
 <template>
     <div class="overflow-x-auto mt-6">
+        <p v-if="phase.type === TYPE_CHECKLIST" class="text-xl font-bold text-gray-900 dark:text-gray-100 mt-4 mb-2">
+            Resultado com base na pontuação
+        </p>
+
         <div v-for="team in props.teams" :key="team.id" class="p-4 rounded-lg border mb-6">
             <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ team.title }}</h4>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Participantes: {{ team.participants.join(', ')
-                }}</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                Participantes: {{ team.participants.join(', ') }}
+            </p>
 
             <div class="overflow-x-auto">
                 <select
