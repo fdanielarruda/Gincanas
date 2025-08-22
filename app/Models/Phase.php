@@ -26,6 +26,7 @@ class Phase extends Model
         'title',
         'description',
         'type',
+        'order',
         'criteria',
         'colocations',
         'checklist_colocations'

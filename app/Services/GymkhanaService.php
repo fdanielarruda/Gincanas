@@ -132,6 +132,42 @@ class GymkhanaService
         return $phase;
     }
 
+    public function reorderPhase(int $gymkhana_id, int $phase_id, string $direction)
+    {
+        $gymkhana = Gymkhana::with('phases')->findOrFail($gymkhana_id);
+        $phaseToReorder = $gymkhana->phases()->findOrFail($phase_id);
+
+        $this->ensurePhasesHaveOrder($gymkhana);
+
+        $gymkhana = Gymkhana::with(['phases' => function ($query) {
+            $query->orderBy('order');
+        }])->findOrFail($gymkhana_id);
+
+        $phases = $gymkhana->phases;
+        $currentIndex = $phases->search(function ($phase) use ($phase_id) {
+            return $phase->id === $phase_id;
+        });
+
+        if ($currentIndex === false) {
+            throw new \Exception('Fase não encontrada na lista ordenada.');
+        }
+
+        $newIndex = $direction === 'up' ? $currentIndex - 1 : $currentIndex + 1;
+
+        if ($newIndex < 0 || $newIndex >= $phases->count()) {
+            return;
+        }
+
+        $phaseToSwap = $phases[$newIndex];
+
+        $currentOrder = $phaseToReorder->order;
+        $phaseToReorder->order = $phaseToSwap->order;
+        $phaseToSwap->order = $currentOrder;
+
+        $phaseToReorder->save();
+        $phaseToSwap->save();
+    }
+
     public function deletePhase(int $gymkhana_id, int $phase_id)
     {
         $gymkhana = Gymkhana::findOrFail($gymkhana_id);
@@ -169,5 +205,24 @@ class GymkhanaService
     {
         $gymkhana = Gymkhana::findOrFail($gymkhana_id);
         $gymkhana->judges()->detach($judgeId);
+    }
+
+    private function ensurePhasesHaveOrder(Gymkhana $gymkhana)
+    {
+        $phases = $gymkhana->phases()->orderBy('order')->get();
+
+        $hasNullOrder = $phases->contains(fn($phase) => $phase->order === null);
+        $ordersAreConsecutive = $phases->pluck('order')->sort()->values()->toArray() === range(1, $phases->count());
+
+        if (!$hasNullOrder && $ordersAreConsecutive) {
+            return;
+        }
+
+        foreach ($phases as $index => $phase) {
+            if ($phase->order !== $index + 1) {
+                $phase->order = $index + 1;
+                $phase->save();
+            }
+        }
     }
 }

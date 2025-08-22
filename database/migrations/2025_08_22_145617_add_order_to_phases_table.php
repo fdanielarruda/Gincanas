@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('phases', function (Blueprint $table) {
-            $table->json('checklist_colocations')->nullable();
+            $table->integer('order')->default(1);
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('phases', function (Blueprint $table) {
-            $table->dropColumn('checklist_colocations');
+            $table->dropColumn('order');
         });
     }
 };

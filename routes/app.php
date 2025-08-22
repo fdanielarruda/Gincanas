@@ -59,6 +59,7 @@ Route::middleware(['auth'])
                 Route::post('/', 'store')->name('store');
                 Route::get('/{phase_id}/editar', 'edit')->name('edit');
                 Route::put('/{phase_id}', 'update')->name('update');
+                Route::put('/{phase_id}/reorder', 'reorder')->name('reorder');
                 Route::delete('/{phase_id}', 'destroy')->name('destroy');
             });
 

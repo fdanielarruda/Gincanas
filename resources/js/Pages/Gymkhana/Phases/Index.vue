@@ -2,8 +2,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import IconButton from '@/Components/Itens/IconButton.vue';
 import TextButton from '@/Components/Itens/TextButton.vue';
-import { Head } from '@inertiajs/vue3';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid';
+import { Head, useForm } from '@inertiajs/vue3';
+import { PencilSquareIcon, TrashIcon, ArrowUpCircleIcon, ArrowDownCircleIcon } from '@heroicons/vue/24/solid';
 import ConfirmDeletionModal from '@/Components/ConfirmDeletionModal.vue';
 import { useDeleter } from '@/Composables/useDeleter';
 
@@ -26,6 +26,7 @@ interface Phase {
     criteria: string[];
     colocations: { place: string, points: number }[];
     checklist_colocations?: { place: string, points: number }[];
+    order: number | null;
 }
 
 const props = defineProps<{
@@ -46,6 +47,20 @@ const {
 const openConfirmRemoveModal = openConfirmModal;
 const closeModal = closeConfirmModal;
 const removePhase = performDeletion;
+
+const form = useForm({});
+
+const movePhase = (phase: Phase, direction: 'up' | 'down') => {
+    form.put(route('gymkhana.phases.reorder', {
+        gymkhana_id: props.gymkhana.id,
+        phase_id: phase.id,
+        direction: direction
+    }), {
+        preserveState: true,
+        preserveScroll: true
+    });
+};
+
 </script>
 
 <template>
@@ -76,12 +91,13 @@ const removePhase = performDeletion;
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                                             Pontuação</th>
-                                        <th scope="col" class="relative px-6 py-3"><span class="sr-only">Ações</span>
+                                        <th scope="col" class="relative px-6 py-3 text-right"><span
+                                                class="sr-only">Ações</span>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                    <tr v-for="phase in gymkhana.phases" :key="phase.id">
+                                    <tr v-for="(phase, index) in gymkhana.phases" :key="phase.id">
                                         <td class="px-6 py-4 whitespace-normal">
                                             <div class="flex flex-col">
                                                 <span class="font-bold">{{ phase.title }}</span>
@@ -93,7 +109,8 @@ const removePhase = performDeletion;
                                             <div v-if="phase.type == TYPE_CRITERIA">
                                                 <ul v-if="phase.criteria && phase.criteria.length > 0"
                                                     class="list-disc list-inside">
-                                                    <li v-for="(criterion, index) in phase.criteria" :key="index">
+                                                    <li v-for="(criterion, critIndex) in phase.criteria"
+                                                        :key="critIndex">
                                                         {{ criterion }}
                                                     </li>
                                                 </ul>
@@ -102,7 +119,8 @@ const removePhase = performDeletion;
                                             <div v-else-if="phase.type == TYPE_COLOCATION">
                                                 <ul v-if="phase.colocations && phase.colocations.length > 0"
                                                     class="list-disc list-inside">
-                                                    <li v-for="(colocation, index) in phase.colocations" :key="index">
+                                                    <li v-for="(colocation, colocIndex) in phase.colocations"
+                                                        :key="colocIndex">
                                                         {{ colocation.place }}: {{ colocation.points }} pts
                                                     </li>
                                                 </ul>
@@ -111,8 +129,10 @@ const removePhase = performDeletion;
                                             <div v-else-if="phase.type == TYPE_CHECKLIST">
                                                 <ul v-if="phase.checklist_colocations && phase.checklist_colocations.length > 0"
                                                     class="list-disc list-inside">
-                                                    <li v-for="(checklist_colocations, index) in phase.checklist_colocations" :key="index">
-                                                        {{ checklist_colocations.place }}: {{ checklist_colocations.points }} pts
+                                                    <li v-for="(checklist_colocations, checkIndex) in phase.checklist_colocations"
+                                                        :key="checkIndex">
+                                                        {{ checklist_colocations.place }}: {{
+                                                            checklist_colocations.points }} pts
                                                     </li>
                                                 </ul>
                                                 <span v-else>Nenhuma colocação definida</span>
@@ -122,6 +142,15 @@ const removePhase = performDeletion;
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <IconButton as="button" color="gray" title="Subir" class="mr-1"
+                                                :disabled="index === 0" @click.stop="movePhase(phase, 'up')">
+                                                <ArrowUpCircleIcon class="h-5 w-5" />
+                                            </IconButton>
+                                            <IconButton as="button" color="gray" title="Descer" class="mr-1"
+                                                :disabled="index === gymkhana.phases.length - 1"
+                                                @click.stop="movePhase(phase, 'down')">
+                                                <ArrowDownCircleIcon class="h-5 w-5" />
+                                            </IconButton>
                                             <IconButton :href="route('gymkhana.phases.edit', [gymkhana.id, phase.id])"
                                                 color="yellow" title="Editar">
                                                 <PencilSquareIcon class="h-5 w-5" />

@@ -27,7 +27,7 @@ class Gymkhana extends Model
 
     public function phases()
     {
-        return $this->hasMany(Phase::class);
+        return $this->hasMany(Phase::class)->orderBy('order');
     }
 
     public function judges()
