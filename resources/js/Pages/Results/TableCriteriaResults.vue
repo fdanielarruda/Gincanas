@@ -84,7 +84,7 @@ const getTeamTotal = (teamId: number) => {
                         <tbody>
                             <tr v-for="(criteria, criteriaIndex) in props.phase.criteria" :key="criteriaIndex"
                                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <td class="py-4 px-6 font-medium text-gray-900 whitespace-normal dark:text-white">
                                     {{ criteria }}
                                 </td>
                                 <td v-for="judge in props.judges" :key="judge.id" class="py-4 px-6 text-center">
