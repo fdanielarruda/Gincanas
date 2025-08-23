@@ -14,6 +14,7 @@ interface Phase {
     type: number;
     criteria: string[] | null;
     colocations: Colocation[] | null;
+    checklist_colocations: Colocation[] | null;
     description: string;
 }
 

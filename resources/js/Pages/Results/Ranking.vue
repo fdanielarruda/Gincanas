@@ -21,8 +21,9 @@ interface Phase {
     title: string;
     type: number;
     criteria: string[] | null;
-    description: string;
     colocations: Colocation[] | null;
+    checklist_colocations: Colocation[] | null;
+    description: string;
 }
 
 interface ResultData {
@@ -119,7 +120,7 @@ const rankedTeams = computed(() => {
                                             <template v-if="showPhaseScores" v-for="phase in props.phases"
                                                 :key="`row-${team.id}-${phase.id}`">
                                                 <td class="py-2 px-4 text-right">{{ calculatePhaseScore(team.id, phase,
-                                                    props.results)
+                                                    props.results, props.teams)
                                                     }}
                                                 </td>
                                             </template>
