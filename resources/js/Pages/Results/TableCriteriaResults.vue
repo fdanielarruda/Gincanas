@@ -61,12 +61,12 @@ const getTeamTotal = (teamId: number) => {
 </script>
 
 <template>
-    <div class="overflow-x-auto mt-6">
+    <div class="overflow-x-auto mt-4">
         <div v-if="props.teams.length > 0 && props.phase.criteria">
             <div v-for="team in props.teams" :key="team.id"
-                 class="p-4 rounded-lg border mb-6">
+                 class="p-2 rounded-lg border mb-4">
                 <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ team.title }}</h4>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Participantes: {{ team.participants.join(', ')
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Participantes: {{ team.participants.join(', ')
                     }}</p>
 
                 <div class="overflow-x-auto">
@@ -78,7 +78,7 @@ const getTeamTotal = (teamId: number) => {
                                     class="py-3 px-6 text-center">
                                     {{ judge.name }}
                                 </th>
-                                <th scope="col" class="py-3 px-6 text-center font-bold">Total por Critério</th>
+                                <th scope="col" class="py-3 px-6 text-center font-bold">Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -99,8 +99,7 @@ const getTeamTotal = (teamId: number) => {
                         </tbody>
                         <tfoot class="bg-gray-200 dark:bg-gray-700 font-semibold text-gray-900 dark:text-gray-100">
                             <tr>
-                                <th scope="row" class="py-3 px-6">Total da Equipe</th>
-                                <td :colspan="props.judges.length" class="py-3 px-6 text-center"></td>
+                                <td scope="row" class="py-3 px-6" :colspan="props.judges.length + 1">Total da Equipe</td>
                                 <td class="py-3 px-6 text-center text-black dark:text-white font-bold">
                                     {{ getTeamTotal(team.id) }}
                                 </td>

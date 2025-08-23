@@ -59,10 +59,10 @@ const rankedTeams = computed(() => {
 </script>
 
 <template>
-    <div class="space-y-8 mt-6">
-        <div v-for="team in teams" :key="team.id" class="p-4 rounded-lg border mb-6">
+    <div class="space-y-4 mt-4">
+        <div v-for="team in teams" :key="team.id" class="p-2 rounded-lg border mb-4">
             <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ team.title }}</h4>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Participantes: {{ team.participants.join(', ') }}
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Participantes: {{ team.participants.join(', ') }}
             </p>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -110,18 +110,18 @@ const rankedTeams = computed(() => {
             </div>
         </div>
 
-        <div class="p-4 rounded-lg border mb-6">
-            <h5 class="text-xl font-bold text-left text-gray-900 dark:text-gray-100">
+        <div class="p-2 rounded-lg border mb-6">
+            <h5 class="text-lg font-bold text-left text-gray-900 dark:text-gray-100 mb-2">
                 Pontuação das Equipes
             </h5>
 
-            <div class="overflow-x-auto mt-4">
+            <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-50 dark:bg-gray-700">
                         <tr>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Posição
+                                #
                             </th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -129,11 +129,11 @@ const rankedTeams = computed(() => {
                             </th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Pontos na Fase
+                                PTS Fase
                             </th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Pontos no Campeonato
+                                PTS Geral
                             </th>
                         </tr>
                     </thead>

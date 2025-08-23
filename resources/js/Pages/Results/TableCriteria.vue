@@ -31,8 +31,8 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+    <div class="overflow-x-auto mt-4">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border">
             <thead>
                 <tr>
                     <th
@@ -51,10 +51,12 @@ const props = defineProps<{
                         {{ criterion }}
                     </td>
                     <td v-for="team in teams" :key="team.id" class="px-6 py-4 whitespace-nowrap">
-                        <input type="number"
-                            class="block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                            v-model="form.results[team.id][phase.id][props.user_id][index]"
-                            :id="`score-${team.id}-${phase.id}-${index}`" min="0" />
+                        <div class="flex justify-center">
+                            <input type="number"
+                                class="w-20 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm text-center"
+                                v-model="form.results[team.id][phase.id][props.user_id][index]"
+                                :id="`score-${team.id}-${phase.id}-${index}`" min="0" />
+                        </div>
                     </td>
                 </tr>
             </tbody>

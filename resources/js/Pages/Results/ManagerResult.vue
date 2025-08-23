@@ -137,32 +137,30 @@ const submit = () => {
         <div class="py-12">
             <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div v-if="props.user_type === USER_TYPE_ADMIN" class="flex justify-end items-center mb-4">
-                            <TextButton :href="route('ranking.generate', { 'result_id': props.id })" class="p-4">
-                                Ver Classificação
-                            </TextButton>
-                        </div>
-
+                    <div class="p-2 text-gray-900 dark:text-gray-100">
                         <div v-if="props.phases.length > 0">
-                            <div class="flex space-x-2 mb-6 overflow-x-auto">
-                                <button v-for="(phase, index) in props.phases" :key="phase.id"
-                                    @click="state.activePhase = phase.id" :class="[
-                                        'px-4 py-2 rounded-md transition-colors duration-200',
-                                        state.activePhase === phase.id ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
-                                    ]" :title="phase.title">
-                                    Fase {{ index + 1 }}
-                                </button>
+                            <div class="p-2 rounded-lg border">
+                                <div class="flex space-x-2 overflow-x-auto">
+                                    <button v-for="(phase, index) in props.phases" :key="phase.id"
+                                        @click="state.activePhase = phase.id" :class="[
+                                            'px-4 py-2 rounded-md transition-colors duration-200',
+                                            state.activePhase === phase.id ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
+                                        ]" :title="phase.title">
+                                        Fase {{ index + 1 }}
+                                    </button>
+                                </div>
                             </div>
 
                             <form @submit.prevent="submit">
                                 <div v-if="currentPhase">
-                                    <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
-                                        {{ currentPhase.title }}
-                                    </h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                                        {{ currentPhase.description }}
-                                    </p>
+                                    <div class="p-2 rounded-lg border mt-4">
+                                        <h3 class="text-xl font-semibold mb-1 text-gray-900 dark:text-gray-100">
+                                            {{ currentPhase.title }}
+                                        </h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            {{ currentPhase.description }}
+                                        </p>
+                                    </div>
 
                                     <TableCriteria
                                         v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_JUDGE"
