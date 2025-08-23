@@ -9,7 +9,6 @@ import { defineProps, defineEmits } from 'vue';
 import { TrashIcon } from '@heroicons/vue/24/solid';
 
 const TYPE_CRITERIA = 1;
-const TYPE_QUIZ = 2;
 const TYPE_COLOCATION = 3;
 const TYPE_CHECKLIST = 4;
 
@@ -82,7 +81,7 @@ const submit = () => {
             item.place = getPlaceText(index);
         });
     } else if (form.type == TYPE_CHECKLIST) {
-        form.checklist_colocations.forEach((item, index) => {
+        form.colocations.forEach((item, index) => {
             item.place = getPlaceText(index);
         });
     }
@@ -160,46 +159,46 @@ const submit = () => {
 
             <div v-if="form.type == TYPE_CHECKLIST">
                 <InputLabel value="Atributo e pontos" />
-                <div v-for="(colocation, index) in form.colocations" :key="index" class="flex items-center gap-2 mt-2">
-                    <TextInput :id="`colocation-place-${index}`" type="text" class="block w-1/2"
-                        v-model="form.colocations[index].place" placeholder="Atributo (ex: Arroz)" />
+                <div v-for="(item, index) in form.checklist_colocations" :key="index"
+                    class="flex items-center gap-2 mt-2">
+                    <TextInput :id="`checklist-item-place-${index}`" type="text" class="block w-1/2"
+                        v-model="form.checklist_colocations[index].place" placeholder="Atributo (ex: Arroz)" />
+                    <TextInput :id="`checklist-item-points-${index}`" type="number" class="block w-1/2"
+                        v-model="form.checklist_colocations[index].points" placeholder="Pontos" />
+                    <button type="button" @click="removeRow('checklist_colocation', index)"
+                        class="text-red-500 hover:text-red-700 font-bold">
+                        <TrashIcon class="h-5 w-5" />
+                    </button>
+                    <InputError class="mt-2" :message="form.errors[`checklist_colocations.${index}.place`]" />
+                    <InputError class="mt-2" :message="form.errors[`checklist_colocations.${index}.points`]" />
+                </div>
+                <button type="button" @click="addRow('checklist_colocation')"
+                    class="mt-2 text-blue-500 hover:text-blue-700 font-bold">
+                    + Adicionar Atributo
+                </button>
+                <InputError class="mt-2" :message="form.errors.checklist_colocations" />
+
+                <hr class="my-4">
+
+                <InputLabel value="Pontuação por Colocação" />
+                <div v-for="(item, index) in form.colocations" :key="index" class="flex items-center gap-2 mt-2">
+                    <div
+                        class="block w-1/2 p-2 border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded-md shadow-sm text-left">
+                        {{ getPlaceText(index) }}
+                    </div>
                     <TextInput :id="`colocation-points-${index}`" type="number" class="block w-1/2"
                         v-model="form.colocations[index].points" placeholder="Pontos" />
                     <button type="button" @click="removeRow('colocation', index)"
                         class="text-red-500 hover:text-red-700 font-bold">
                         <TrashIcon class="h-5 w-5" />
                     </button>
-                    <InputError class="mt-2" :message="form.errors[`colocations.${index}.place`]" />
                     <InputError class="mt-2" :message="form.errors[`colocations.${index}.points`]" />
                 </div>
                 <button type="button" @click="addRow('colocation')"
                     class="mt-2 text-blue-500 hover:text-blue-700 font-bold">
-                    + Adicionar Atributo
-                </button>
-                <InputError class="mt-2" :message="form.errors.colocations" />
-
-                <hr class="my-4">
-
-                <InputLabel value="Pontuação por Colocação" />
-                <div v-for="(checklist_colocation, index) in form.checklist_colocations" :key="index"
-                    class="flex items-center gap-2 mt-2">
-                    <div
-                        class="block w-1/2 p-2 border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded-md shadow-sm text-left">
-                        {{ getPlaceText(index) }}
-                    </div>
-                    <TextInput :id="`checklist-colocation-points-${index}`" type="number" class="block w-1/2"
-                        v-model="form.checklist_colocations[index].points" placeholder="Pontos" />
-                    <button type="button" @click="removeRow('checklist_colocation', index)"
-                        class="text-red-500 hover:text-red-700 font-bold">
-                        <TrashIcon class="h-5 w-5" />
-                    </button>
-                    <InputError class="mt-2" :message="form.errors[`checklist_colocations.${index}.points`]" />
-                </div>
-                <button type="button" @click="addRow('checklist_colocation')"
-                    class="mt-2 text-blue-500 hover:text-blue-700 font-bold">
                     + Adicionar Pontuação por Colocação
                 </button>
-                <InputError class="mt-2" :message="form.errors.checklist_colocations" />
+                <InputError class="mt-2" :message="form.errors.colocations" />
             </div>
         </div>
 

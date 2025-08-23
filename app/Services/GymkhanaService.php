@@ -78,6 +78,9 @@ class GymkhanaService
     {
         $gymkhana = Gymkhana::findOrFail($gymkhana_id);
 
+        $maxOrder = $gymkhana->phases()->max('order');
+        $data['order'] = ($maxOrder) ? $maxOrder + 1 : 1;
+
         if (isset($data['type'])) {
             if ((int) $data['type'] === Phase::TYPE_CRITERIA) {
                 unset($data['colocations']);
