@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import ExternalLayout from '@/Layouts/ExternalLayout.vue';
 import { InformationCircleIcon } from '@heroicons/vue/24/solid';
@@ -45,6 +45,17 @@ const props = defineProps<{
 }>();
 
 const showPhaseScores = ref(false);
+
+onMounted(() => {
+    const savedState = sessionStorage.getItem('showPhaseScores');
+    if (savedState !== null) {
+        showPhaseScores.value = JSON.parse(savedState);
+    }
+});
+
+watch(showPhaseScores, (newValue) => {
+    sessionStorage.setItem('showPhaseScores', JSON.stringify(newValue));
+});
 
 const rankedTeams = computed(() => {
     return getRankedTeams(props.teams, props.phases, props.results);
@@ -121,7 +132,7 @@ const rankedTeams = computed(() => {
                                                 :key="`row-${team.id}-${phase.id}`">
                                                 <td class="py-2 px-4 text-right">{{ calculatePhaseScore(team.id, phase,
                                                     props.results, props.teams)
-                                                    }}
+                                                }}
                                                 </td>
                                             </template>
                                             <td class="py-2 px-4 text-right font-bold">{{ team.totalScore }}</td>
