@@ -129,11 +129,11 @@ const rankedTeams = computed(() => {
                             </th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Total de Pontos da Fase
+                                Pontos na Fase
                             </th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Pontos do Campeonato
+                                Pontos no Campeonato
                             </th>
                         </tr>
                     </thead>
