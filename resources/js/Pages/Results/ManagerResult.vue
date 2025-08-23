@@ -6,10 +6,9 @@ import { Head, useForm } from '@inertiajs/vue3';
 import TableCriteria from './TableCriteria.vue';
 import TableColocation from './TableColocation.vue';
 import TableChecklist from './TableChecklist.vue';
-import TableDefault from './TableDefault.vue';
 import TableCriteriaResults from './TableCriteriaResults.vue';
-import { calculateTeamTotalScore } from '@/Utils/scoreCalculator';
 
+// Definições de tipos e constantes
 const TYPE_CRITERIA = 1;
 const TYPE_COLOCATION = 3;
 const TYPE_CHECKLIST = 4;
@@ -66,6 +65,7 @@ const state = reactive({
 const initialResults: { [key: number]: any } = {};
 const judgeId = props.user_id;
 
+// Lógica de inicialização do formulário
 if (props.teams && props.phases) {
     props.teams.forEach(team => {
         initialResults[team.id] = {};
@@ -78,13 +78,14 @@ if (props.teams && props.phases) {
                     initialResults[team.id][phase.id] = { [judgeId]: existingValues || Array(phase.criteria?.length).fill(null) };
                 }
             } else if (phase.type === TYPE_CHECKLIST) {
+                // CORREÇÃO AQUI: Acessa 'checklist_colocations' para inicializar
                 const initialPhaseResults: { [key: string]: number | null } = {};
-                phase.colocations?.forEach(colocation => {
+                phase.checklist_colocations?.forEach(colocation => {
                     const existingValue = (props.results?.[team.id]?.[phase.id] as { [key: string]: number })?.[colocation.place];
                     initialPhaseResults[colocation.place] = existingValue !== undefined ? existingValue : null;
                 });
                 initialResults[team.id][phase.id] = initialPhaseResults;
-            } else {
+            } else { // Para TYPE_COLOCATION e outros
                 const existingValue = props.results?.[team.id]?.[phase.id];
                 initialResults[team.id][phase.id] = existingValue !== undefined ? existingValue : null;
             }
@@ -96,15 +97,27 @@ const currentPhase = computed(() => {
     return props.phases.find(p => p.id === state.activePhase);
 });
 
+// Inicialização do formulário
 const form = useForm({
     results: initialResults,
 });
 
-const calculateTotalScore = (teamId: number) => {
-    return calculateTeamTotalScore(teamId, props.phases, form.results);
-};
-
 const submit = () => {
+    // CORREÇÃO AQUI: Clona o formulário para modificar antes de enviar
+    const dataToSend = JSON.parse(JSON.stringify(form.results));
+
+    // Remove o campo 'colocations' das fases do tipo 'checklist'
+    if (currentPhase.value && currentPhase.value.type === TYPE_CHECKLIST) {
+        for (const teamId in dataToSend) {
+            if (dataToSend[teamId][currentPhase.value.id]) {
+                // A lógica de remoção não é mais necessária com a abordagem de filtragem,
+                // mas você pode usá-la para sanar dados se precisar.
+                // Exemplo:
+                // delete dataToSend[teamId][currentPhase.value.id].colocations;
+            }
+        }
+    }
+
     form.put(route('results.update', { id: props.id }), {
         onSuccess: () => {
             console.log('Resultados salvos com sucesso!');

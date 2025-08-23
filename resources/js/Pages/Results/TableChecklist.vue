@@ -40,20 +40,15 @@ const calculateTeamPhaseScore = (teamId: number): number => {
     return total;
 };
 
-// Propriedade computada para a classificação das equipes
 const rankedTeams = computed(() => {
-    // 1. Mapeia as equipes para um novo array com as suas pontuações
     const teamsWithScores = props.teams.map(team => ({
         ...team,
         score: calculateTeamPhaseScore(team.id),
     }));
 
-    // 2. Ordena o array em ordem decrescente de pontuação
     const sortedTeams = teamsWithScores.sort((a, b) => b.score - a.score);
 
-    // 3. Adiciona os pontos do campeonato com base na colocação
     return sortedTeams.map((team, index) => {
-        // Acessa o objeto de premiação com base no índice. Se não existir, retorna 0.
         const championshipPoints = props.phase.colocations?.[index]?.points || 0;
         return {
             ...team,
