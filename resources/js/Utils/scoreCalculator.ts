@@ -21,7 +21,7 @@ const calculateRankedPoints = (teams: Team[], phase: Phase, results: ResultData)
         const phaseResult = teamResults[phase.id];
 
         if (phase.type === TYPE_CHECKLIST && phase.checklist_colocations) {
-            if (typeof phaseResult === 'object' && phaseResult !== null) {
+            if (phaseResult && typeof phaseResult === 'object') {
                 for (const colocationPlace in phaseResult) {
                     const colocation = phase.checklist_colocations.find(c => c.place === colocationPlace);
                     if (colocation) {
