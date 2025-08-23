@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -39,6 +40,11 @@ class Handler extends ExceptionHandler
             return redirect()->route('login');
         }
 
-        return back()->with('error', $e->getMessage() ?? 'Erro ao realizar requisição');
+        if ($e instanceof ModelNotFoundException) {
+            return redirect()->route('login');
+        }
+
+        return redirect(url()->previous() ?? route('home'))
+            ->with('error', $e->getMessage() ?? 'Erro ao realizar requisição');
     }
 }

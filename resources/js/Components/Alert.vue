@@ -11,7 +11,10 @@ const show = ref(false);
 
 watch(() => props.message, (newMessage) => {
     if (newMessage) {
-        show.value = true;
+        show.value = false;
+        setTimeout(() => {
+            show.value = true;
+        }, 10);
         setTimeout(() => {
             show.value = false;
         }, 3000);
