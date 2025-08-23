@@ -2,6 +2,7 @@ import { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { Errors, Page, PageProps } from '@inertiajs/vue3';
 
 interface FlashMessages {
+    token?: string;
     success?: string;
     error?: string;
     message?: string;

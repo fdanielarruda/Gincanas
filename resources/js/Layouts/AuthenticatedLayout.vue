@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 import NavLink from '@/Components/NavLink.vue';
 import { SunIcon, MoonIcon, Bars3Icon, ChevronDownIcon } from '@heroicons/vue/24/solid';
 import { staticNavigationLinks } from '@/data/navigationLinks';
 import { usePage } from '@inertiajs/vue3';
 import Alert from '@/Components/Alert.vue';
+import { FlashMessages } from '@/types/inertia';
 
 interface User {
     id: number;
@@ -192,6 +193,5 @@ const mainContentClasses = computed(() => {
         </main>
     </div>
 
-    <Alert :message="page.props.flash.success ?? null" type="success" />
-    <Alert :message="page.props.flash.error ?? null" type="error" />
+    <Alert :flashMessage="page.props.flash ?? null" />
 </template>
