@@ -29,18 +29,10 @@ const submit = () => {
     <Head title="Adicionar Resultado" />
 
     <AuthenticatedLayout>
-        <div class="py-12">
-            <div class="mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <ResultForm :form="form" :gymkhanas="props.gymkhanas" @form-submitted="submit">
-                            <template #buttonText>
-                                Iniciar resultados
-                            </template>
-                        </ResultForm>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <ResultForm :form="form" :gymkhanas="props.gymkhanas" @form-submitted="submit">
+            <template #buttonText>
+                Iniciar resultados
+            </template>
+        </ResultForm>
     </AuthenticatedLayout>
 </template>

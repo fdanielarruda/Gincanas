@@ -130,70 +130,58 @@ const submit = () => {
 </script>
 
 <template>
-
     <Head title="Gerenciar Resultados" />
 
     <AuthenticatedLayout>
-        <div class="py-12">
-            <div class="mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-2 text-gray-900 dark:text-gray-100">
-                        <div v-if="props.phases.length > 0">
-                            <div class="p-2 rounded-lg border">
-                                <div class="flex space-x-2 overflow-x-auto">
-                                    <button v-for="(phase, index) in props.phases" :key="phase.id"
-                                        @click="state.activePhase = phase.id" :class="[
-                                            'px-4 py-2 rounded-md transition-colors duration-200',
-                                            state.activePhase === phase.id ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
-                                        ]" :title="phase.title">
-                                        Fase {{ index + 1 }}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <form @submit.prevent="submit">
-                                <div v-if="currentPhase">
-                                    <div class="p-2 rounded-lg border mt-4">
-                                        <h3 class="text-xl font-semibold mb-1 text-gray-900 dark:text-gray-100">
-                                            {{ currentPhase.title }}
-                                        </h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                                            {{ currentPhase.description }}
-                                        </p>
-                                    </div>
-
-                                    <TableCriteria
-                                        v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_JUDGE"
-                                        :phase="currentPhase" :teams="props.teams" :form="form" :user_id="props.user_id"
-                                        :user_type="props.user_type" :judges="props.judges" />
-
-                                    <TableCriteriaResults
-                                        v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_ADMIN"
-                                        :phase="currentPhase" :teams="props.teams" :results="results"
-                                        :judges="props.judges" />
-
-                                    <TableColocation v-if="currentPhase.type === TYPE_COLOCATION" :phase="currentPhase"
-                                        :teams="props.teams" :form="form" />
-
-                                    <TableChecklist v-if="currentPhase.type === TYPE_CHECKLIST" :phase="currentPhase"
-                                        :teams="props.teams" :form="form" />
-                                </div>
-
-                                <div class="flex items-center justify-end mt-6 space-x-4">
-                                    <TextButton :disabled="form.processing" class="p-4">
-                                        Salvar Resultados
-                                    </TextButton>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div v-else class="text-center text-gray-500 dark:text-gray-400">
-                            <p>Esta gincana não possui fases ou equipes cadastradas para gerenciamento de resultados.
-                            </p>
-                        </div>
-                    </div>
+        <div v-if="props.phases.length > 0">
+            <div class="p-2 rounded-lg border">
+                <div class="flex space-x-2 overflow-x-auto">
+                    <button v-for="(phase, index) in props.phases" :key="phase.id" @click="state.activePhase = phase.id"
+                        :class="[
+                            'px-4 py-2 rounded-md transition-colors duration-200',
+                            state.activePhase === phase.id ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
+                        ]" :title="phase.title">
+                        Fase {{ index + 1 }}
+                    </button>
                 </div>
             </div>
+
+            <form @submit.prevent="submit">
+                <div v-if="currentPhase">
+                    <div class="p-2 rounded-lg border mt-4">
+                        <h3 class="text-xl font-semibold mb-1 text-gray-900 dark:text-gray-100">
+                            {{ currentPhase.title }}
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            {{ currentPhase.description }}
+                        </p>
+                    </div>
+
+                    <TableCriteria v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_JUDGE"
+                        :phase="currentPhase" :teams="props.teams" :form="form" :user_id="props.user_id"
+                        :user_type="props.user_type" :judges="props.judges" />
+
+                    <TableCriteriaResults v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_ADMIN"
+                        :phase="currentPhase" :teams="props.teams" :results="results" :judges="props.judges" />
+
+                    <TableColocation v-if="currentPhase.type === TYPE_COLOCATION" :phase="currentPhase"
+                        :teams="props.teams" :form="form" />
+
+                    <TableChecklist v-if="currentPhase.type === TYPE_CHECKLIST" :phase="currentPhase"
+                        :teams="props.teams" :form="form" />
+                </div>
+
+                <div class="flex items-center justify-end mt-6 space-x-4">
+                    <TextButton :disabled="form.processing" class="p-4">
+                        Salvar Resultados
+                    </TextButton>
+                </div>
+            </form>
+        </div>
+
+        <div v-else class="text-center text-gray-500 dark:text-gray-400">
+            <p>Esta gincana não possui fases ou equipes cadastradas para gerenciamento de resultados.
+            </p>
         </div>
     </AuthenticatedLayout>
 </template>

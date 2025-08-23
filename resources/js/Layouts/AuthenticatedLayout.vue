@@ -180,7 +180,15 @@ const mainContentClasses = computed(() => {
         </div>
 
         <main class="flex-1 overflow-auto p-2" :class="mainContentClasses">
-            <slot />
+            <div class="py-12">
+                <div class="mx-auto">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-2 lg:p-4 py-4 text-gray-900 dark:text-gray-100">
+                            <slot />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 

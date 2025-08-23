@@ -24,8 +24,16 @@ if (localStorage.getItem("theme") === "dark") {
 
 <template>
     <div class="bg-gray-100 dark:bg-gray-900 min-h-screen flex">
-        <main class="flex-1 overflow-auto p-4">
-            <slot />
+        <main class="flex-1 overflow-auto p-2">
+            <div class="py-6">
+                <div class="mx-auto">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-2 lg:p-4 py-4 text-gray-900 dark:text-gray-100">
+                            <slot />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </template>
