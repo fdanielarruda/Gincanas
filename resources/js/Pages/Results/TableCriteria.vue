@@ -47,7 +47,7 @@ const props = defineProps<{
             </thead>
             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 <tr v-if="user_type === USER_TYPE_JUDGE" v-for="(criterion, index) in phase.criteria" :key="index">
-                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">
+                    <td class="px-6 py-4 whitespace-normal font-medium text-gray-900 dark:text-gray-100">
                         {{ criterion }}
                     </td>
                     <td v-for="team in teams" :key="team.id" class="px-6 py-4 whitespace-nowrap">
