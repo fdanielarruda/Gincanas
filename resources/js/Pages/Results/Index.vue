@@ -4,7 +4,7 @@ import IconButton from '@/Components/Itens/IconButton.vue';
 import { useDeleter } from '@/Composables/useDeleter';
 import TextButton from '@/Components/Itens/TextButton.vue';
 import ConfirmDeletionModal from '@/Components/ConfirmDeletionModal.vue';
-import { formatDateForDisplay } from '@/Utils/dateUtils';
+import { formatDateTimeForDisplay } from '@/Utils/dateUtils';
 import { Head } from '@inertiajs/vue3';
 import { PlayCircleIcon, TrashIcon, TrophyIcon } from '@heroicons/vue/24/solid';
 
@@ -13,12 +13,12 @@ const USER_TYPE_JUDGE = 2;
 
 interface Gymkhana {
     id: number;
-    tite: string;
+    title: string;
 }
 
 interface GymkhanaResult {
     id: number;
-    gimkhana: Gymkhana;
+    gymkhana: Gymkhana;
     created_at: string;
     updated_at: string;
 }
@@ -64,10 +64,7 @@ const {
                                             Gincana</th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                                            Criado em</th>
-                                        <th scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                                            Atualizado em</th>
+                                            Última atualização</th>
                                         <th scope="col" class="relative px-6 py-3"><span class="sr-only">Ações</span>
                                         </th>
                                     </tr>
@@ -77,11 +74,8 @@ const {
                                         <td class="px-6 py-4 whitespace-normal">
                                             {{ result.gymkhana.title }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {{ formatDateForDisplay(result.created_at) }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {{ formatDateForDisplay(result.updated_at) }}
+                                        <td class="px-6 py-4 whitespace-normal">
+                                            {{ formatDateTimeForDisplay(result.updated_at) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <IconButton :href="route('results.manager', result.id)" as="button"
@@ -90,8 +84,9 @@ const {
                                             </IconButton>
 
                                             <template v-if="user_type === USER_TYPE_ADMIN">
-                                                <IconButton :href="route('ranking.generate', { 'result_id': result.id })"
-                                                    :target="target" class="ml-1" color="indigo" title="Classificação">
+                                                <IconButton
+                                                    :href="route('ranking.generate', { 'result_id': result.id })"
+                                                    class="ml-1" color="indigo" title="Classificação">
                                                     <TrophyIcon class="h-5 w-5" />
                                                 </IconButton>
 
