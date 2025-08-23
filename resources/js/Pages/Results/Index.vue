@@ -7,6 +7,7 @@ import ConfirmDeletionModal from '@/Components/ConfirmDeletionModal.vue';
 import { formatDateTimeForDisplay } from '@/Utils/dateUtils';
 import { Head } from '@inertiajs/vue3';
 import { PlayCircleIcon, TrashIcon, TrophyIcon } from '@heroicons/vue/24/solid';
+import LinkButton from '@/Components/LinkButton.vue';
 
 const USER_TYPE_ADMIN = 1;
 const USER_TYPE_JUDGE = 2;
@@ -80,10 +81,9 @@ const {
                             </IconButton>
 
                             <template v-if="user_type === USER_TYPE_ADMIN">
-                                <IconButton :href="route('ranking.generate', { 'result_id': result.id })" class="ml-1"
-                                    color="indigo" title="Classificação">
+                                <LinkButton :link="route('ranking.generate', { 'result_id': result.id })" title="Classificação" class="ml-1" color="indigo">
                                     <TrophyIcon class="h-5 w-5" />
-                                </IconButton>
+                                </LinkButton>
 
                                 <IconButton as="button" color="red" title="Deletar" class="ml-1"
                                     @click="openConfirmModal(result)">

@@ -17,15 +17,15 @@ const props = defineProps({
     }
 });
 
-const baseClasses = 'flex items-center justify-center p-1 rounded-md border-2 flex-shrink-0';
-
-const colorClasses = computed(() => {
-    return `bg-${props.color}-600 hover:bg-${props.color}-700 border-${props.color}-600`;
-});
+const baseButtonClasses = computed(() => `
+    inline-flex items-center border border-transparent rounded-md font-semibold text-xs uppercase tracking-widest
+    focus:outline-none disabled:opacity-25 transition ease-in-out duration-150
+    bg-indigo-600 hover:bg-indigo-700 border-indigo-600 text-white px-1 py-1
+`);
 </script>
 
 <template>
-    <a :href="link" target="_blank" :class="[baseClasses, colorClasses]" :title="title">
+    <a :href="link" target="_blank" :class="baseButtonClasses" :title="title">
         <slot />
     </a>
 </template>
