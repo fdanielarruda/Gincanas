@@ -133,8 +133,8 @@ class GymkhanaResultService
                 'title' => $gymkhana->title,
                 'description' => $gymkhana->description,
             ],
-            'teams' => $gymkhana->teams,
-            'phases' => $gymkhana->phases,
+            'teams' => $result->teams,
+            'phases' => $result->phases,
             'judges' => $gymkhana->judges,
             'results' => $result->results
         ];

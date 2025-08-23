@@ -14,27 +14,34 @@ const calculateRankedPoints = (teams: Team[], phase: Phase, results: ResultData)
         let phaseScore = 0;
         const teamResults = results[team.id];
 
-        if (teamResults && teamResults[phase.id]) {
-            const phaseResult = teamResults[phase.id];
+        if (!teamResults || teamResults[phase.id] === null || typeof teamResults[phase.id] === 'undefined') {
+            return { ...team, phaseScore: 0 };
+        }
 
-            if (phase.type === TYPE_CHECKLIST && phase.checklist_colocations) {
-                if (typeof phaseResult === 'object' && phaseResult !== null) {
-                    for (const colocationPlace in phaseResult) {
-                        const colocation = phase.checklist_colocations.find(c => c.place === colocationPlace);
-                        if (colocation) {
-                            const quantity = Number(phaseResult[colocationPlace]) || 0;
-                            phaseScore += quantity * colocation.points;
-                        }
+        const phaseResult = teamResults[phase.id];
+
+        if (phase.type === TYPE_CHECKLIST && phase.checklist_colocations) {
+            if (typeof phaseResult === 'object' && phaseResult !== null) {
+                for (const colocationPlace in phaseResult) {
+                    const colocation = phase.checklist_colocations.find(c => c.place === colocationPlace);
+                    if (colocation) {
+                        const quantity = Number(phaseResult[colocationPlace]) || 0;
+                        phaseScore += quantity * colocation.points;
                     }
                 }
-            } else {
-                phaseScore = Number(phaseResult) || 0;
             }
+        } else {
+            phaseScore = Number(phaseResult) || 0;
         }
+
         return { ...team, phaseScore };
     });
 
     const sortedTeams = teamsWithPhaseScore.sort((a, b) => b.phaseScore - a.phaseScore);
+
+    if (sortedTeams.length > 0 && sortedTeams[0].phaseScore === 0) {
+        return scores;
+    }
 
     sortedTeams.forEach((team, index) => {
         const championshipPoints = phase.colocations?.[index]?.points || 0;
@@ -45,9 +52,13 @@ const calculateRankedPoints = (teams: Team[], phase: Phase, results: ResultData)
 };
 
 export const calculatePhaseScore = (teamId: number, phase: Phase, results: ResultData, teams: Team[]): number => {
+    const teamResults = results[teamId]?.[phase.id];
+    if (teamResults === null || typeof teamResults === 'undefined') {
+        return 0;
+    }
+
     if (phase.type === TYPE_CRITERIA) {
         let score = 0;
-        const teamResults = results[teamId]?.[phase.id];
         if (typeof teamResults === 'object' && teamResults !== null) {
             for (const judgeId in teamResults) {
                 const judgeScores = teamResults[judgeId];
@@ -69,9 +80,8 @@ export const calculatePhaseScore = (teamId: number, phase: Phase, results: Resul
 
 export const calculateTeamTotalScore = (teamId: number, phases: Phase[], results: ResultData, teams: Team[]): number => {
     let total = 0;
-    const teamResults = results[teamId];
 
-    if (teamResults) {
+    if (results && results[teamId]) {
         for (const phase of phases) {
             total += calculatePhaseScore(teamId, phase, results, teams);
         }
