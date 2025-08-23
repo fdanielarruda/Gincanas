@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { defineProps } from 'vue';
+import { defineProps, computed } from 'vue';
 
 interface Team {
     id: number;
@@ -39,14 +39,36 @@ const calculateTeamPhaseScore = (teamId: number): number => {
     }
     return total;
 };
+
+// Propriedade computada para a classificação das equipes
+const rankedTeams = computed(() => {
+    // 1. Mapeia as equipes para um novo array com as suas pontuações
+    const teamsWithScores = props.teams.map(team => ({
+        ...team,
+        score: calculateTeamPhaseScore(team.id),
+    }));
+
+    // 2. Ordena o array em ordem decrescente de pontuação
+    const sortedTeams = teamsWithScores.sort((a, b) => b.score - a.score);
+
+    // 3. Adiciona os pontos do campeonato com base na colocação
+    return sortedTeams.map((team, index) => {
+        // Acessa o objeto de premiação com base no índice. Se não existir, retorna 0.
+        const championshipPoints = props.phase.colocations?.[index]?.points || 0;
+        return {
+            ...team,
+            championshipPoints: championshipPoints,
+        };
+    });
+});
 </script>
 
 <template>
     <div class="space-y-8 mt-6">
         <div v-for="team in teams" :key="team.id" class="p-4 rounded-lg border mb-6">
             <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ team.title }}</h4>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Participantes: {{ team.participants.join(', ')
-                }}</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Participantes: {{ team.participants.join(', ') }}
+            </p>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-50 dark:bg-gray-700">
@@ -89,6 +111,53 @@ const calculateTeamPhaseScore = (teamId: number): number => {
                             </td>
                         </tr>
                     </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="p-4 rounded-lg border mb-6">
+            <h5 class="text-xl font-bold text-left text-gray-900 dark:text-gray-100">
+                Pontuação das Equipes
+            </h5>
+
+            <div class="overflow-x-auto mt-4">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Posição
+                            </th>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Equipe
+                            </th>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Total de Pontos da Fase
+                            </th>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Pontos do Campeonato
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        <tr v-for="(team, index) in rankedTeams" :key="team.id">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">
+                                {{ index + 1 }}º
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
+                                {{ team.title }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">
+                                {{ team.score }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">
+                                {{ team.championshipPoints }}
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>

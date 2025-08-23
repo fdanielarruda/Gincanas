@@ -161,12 +161,11 @@ const submit = () => {
                                         :phase="currentPhase" :teams="props.teams" :results="results"
                                         :judges="props.judges" />
 
-                                    <TableChecklist v-if="currentPhase.type === TYPE_CHECKLIST" :phase="currentPhase"
+                                    <TableColocation v-if="currentPhase.type === TYPE_COLOCATION" :phase="currentPhase"
                                         :teams="props.teams" :form="form" />
 
-                                    <TableColocation
-                                        v-if="currentPhase.type === TYPE_COLOCATION || currentPhase.type === TYPE_CHECKLIST"
-                                        :phase="currentPhase" :teams="props.teams" :form="form" />
+                                    <TableChecklist v-if="currentPhase.type === TYPE_CHECKLIST" :phase="currentPhase"
+                                        :teams="props.teams" :form="form" />
                                 </div>
 
                                 <div class="flex items-center justify-end mt-6 space-x-4">
