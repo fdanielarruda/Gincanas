@@ -64,7 +64,7 @@ const getTeamTotal = (teamId: number) => {
     <div class="overflow-x-auto mt-4">
         <div v-if="props.teams.length > 0 && props.phase.criteria">
             <div v-for="team in props.teams" :key="team.id"
-                 class="p-2 rounded-lg border mb-4">
+                 class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm mb-4">
                 <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ team.title }}</h4>
                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Participantes: {{ team.participants.join(', ')
                     }}</p>

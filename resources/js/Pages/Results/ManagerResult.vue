@@ -134,7 +134,7 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <div v-if="props.phases.length > 0">
-            <div class="p-2 rounded-lg border">
+            <div class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
                 <div class="flex space-x-2 overflow-x-auto">
                     <button v-for="(phase, index) in props.phases" :key="phase.id" @click="state.activePhase = phase.id"
                         :class="[
@@ -148,7 +148,7 @@ const submit = () => {
 
             <form @submit.prevent="submit">
                 <div v-if="currentPhase">
-                    <div class="p-2 rounded-lg border mt-4">
+                    <div class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm mt-4">
                         <h3 class="text-xl font-semibold mb-1 text-gray-900 dark:text-gray-100">
                             {{ currentPhase.title }}
                         </h3>

@@ -60,7 +60,7 @@ const rankedTeams = computed(() => {
 
 <template>
     <div class="space-y-4 mt-4">
-        <div v-for="team in teams" :key="team.id" class="p-2 rounded-lg border mb-4">
+        <div v-for="team in teams" :key="team.id" class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm mb-4">
             <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ team.title }}</h4>
             <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Participantes: {{ team.participants.join(', ') }}
             </p>
@@ -110,7 +110,7 @@ const rankedTeams = computed(() => {
             </div>
         </div>
 
-        <div class="p-2 rounded-lg border mb-6">
+        <div class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 mb-6">
             <h5 class="text-lg font-bold text-left text-gray-900 dark:text-gray-100 mb-2">
                 Pontuação das Equipes
             </h5>
