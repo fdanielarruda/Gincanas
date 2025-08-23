@@ -46,6 +46,15 @@ const rankedTeams = computed(() => {
         score: calculateTeamPhaseScore(team.id),
     }));
 
+    const allScoresAreZero = teamsWithScores.every(team => team.score === 0);
+
+    if (allScoresAreZero) {
+        return teamsWithScores.map(team => ({
+            ...team,
+            championshipPoints: 0,
+        }));
+    }
+
     const sortedTeams = teamsWithScores.sort((a, b) => b.score - a.score);
 
     return sortedTeams.map((team, index) => {
@@ -60,7 +69,8 @@ const rankedTeams = computed(() => {
 
 <template>
     <div class="space-y-4 mt-4">
-        <div v-for="team in teams" :key="team.id" class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm mb-4">
+        <div v-for="team in teams" :key="team.id"
+            class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm mb-4">
             <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ team.title }}</h4>
             <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Participantes: {{ team.participants.join(', ') }}
             </p>
@@ -84,7 +94,7 @@ const rankedTeams = computed(() => {
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                         <tr v-for="colocation in phase.checklist_colocations" :key="colocation.place">
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">
+                            <td class="px-6 py-4 whitespace-normal font-medium text-gray-900 dark:text-gray-100">
                                 {{ colocation.place }} ({{ colocation.points }})
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
