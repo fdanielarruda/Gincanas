@@ -12,6 +12,7 @@ class GymkhanaResultService
     public function list()
     {
         return GymkhanaResult::with('gymkhana')
+            ->orderBy('updated_at', 'desc')
             ->get();
     }
 
