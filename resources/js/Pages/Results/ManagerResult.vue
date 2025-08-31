@@ -112,9 +112,7 @@ const submit = () => {
                         <h3 class="text-xl font-semibold mb-1 text-gray-900 dark:text-gray-100">
                             {{ currentPhase.title }}
                         </h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                            {{ currentPhase.description }}
-                        </p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400" v-html="currentPhase.description"></p>
                     </div>
 
                     <TableCriteria v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_JUDGE"

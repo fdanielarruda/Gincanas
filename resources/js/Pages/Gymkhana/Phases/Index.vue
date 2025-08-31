@@ -81,8 +81,8 @@ const movePhase = (phase: Phase, direction: 'up' | 'down') => {
                         <td class="px-6 py-4 whitespace-normal">
                             <div class="flex flex-col">
                                 <span class="font-bold">{{ phase.title }}</span>
-                                <span class="text-sm text-gray-600 dark:text-gray-400">{{
-                                    phase.description }}</span>
+                                <span class="text-sm text-gray-600 dark:text-gray-400" v-html="phase.description">
+                                </span>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-normal">

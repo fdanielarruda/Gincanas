@@ -7,6 +7,7 @@ import SelectInput from '@/Components/SelectInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { defineProps, defineEmits } from 'vue';
 import { TrashIcon } from '@heroicons/vue/24/solid';
+import TextEditor from '@/Components/TextEditor.vue';
 
 const TYPE_CRITERIA = 1;
 const TYPE_COLOCATION = 3;
@@ -103,15 +104,14 @@ const submit = () => {
 
             <div>
                 <InputLabel for="abbreviation" value="Abreviação da Prova" />
-                <TextInput id="abbreviation" type="text" class="mt-1 block w-full" v-model="form.abbreviation" required autofocus />
+                <TextInput id="abbreviation" type="text" class="mt-1 block w-full" v-model="form.abbreviation" required
+                    autofocus />
                 <InputError class="mt-2" :message="form.errors.abbreviation" />
             </div>
 
             <div>
                 <InputLabel for="description" value="Descrição da Prova" />
-                <textarea id="description"
-                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                    v-model="form.description" rows="4"></textarea>
+                <TextEditor v-model="form.description" />
                 <InputError class="mt-2" :message="form.errors.description" />
             </div>
 
