@@ -1,5 +1,3 @@
-// src/utils/formValidationUtils.ts
-
 import { Phase, Team, ResultData } from '@/types';
 import {
     TYPE_CRITERIA,
