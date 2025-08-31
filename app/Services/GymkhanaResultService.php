@@ -132,7 +132,9 @@ class GymkhanaResultService
             'gincana' => [
                 'id' => $gymkhana->id,
                 'title' => $gymkhana->title,
+                'abbreviation' => $gymkhana->abbreviation,
                 'description' => $gymkhana->description,
+                'order' => $gymkhana->order,
             ],
             'teams' => $result->teams,
             'phases' => $result->phases,

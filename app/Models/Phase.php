@@ -24,6 +24,7 @@ class Phase extends Model
     protected $fillable = [
         'gymkhana_id',
         'title',
+        'abbreviation',
         'description',
         'type',
         'order',

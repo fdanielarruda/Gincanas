@@ -25,6 +25,7 @@ class PhaseStoreRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
+            'abbreviation' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'type' => ['required', 'integer', Rule::in(Phase::TYPES)],
 
