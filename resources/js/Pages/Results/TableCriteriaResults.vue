@@ -35,24 +35,6 @@ const getJudgeScore = (teamId: number, judgeId: number, criteriaIndex: number) =
     return 0;
 };
 
-const getCriteriaTotalByJudge = (judgeId: number, criteriaIndex: number) => {
-    let total = 0;
-    props.teams.forEach(team => {
-        total += getJudgeScore(team.id, judgeId, criteriaIndex);
-    });
-    return total;
-};
-
-const getJudgeTotal = (judgeId: number) => {
-    let total = 0;
-    if (props.phase.criteria) {
-        props.phase.criteria.forEach((_, criteriaIndex) => {
-            total += getCriteriaTotalByJudge(judgeId, criteriaIndex);
-        });
-    }
-    return total;
-};
-
 const getTeamTotalByJudge = (teamId: number, judgeId: number) => {
     let total = 0;
     if (props.phase.criteria) {
@@ -81,7 +63,6 @@ const getTeamTotalByJudge = (teamId: number, judgeId: number) => {
                                     class="py-3 px-6 text-center">
                                     {{ team.title }}
                                 </th>
-                                <th scope="col" class="py-3 px-6 text-center font-bold">Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,9 +76,6 @@ const getTeamTotalByJudge = (teamId: number, judgeId: number) => {
                                         {{ getJudgeScore(team.id, judge.id, criteriaIndex) }}
                                     </span>
                                 </td>
-                                <td class="py-4 px-6 text-center font-bold text-black dark:text-white">
-                                    {{ getCriteriaTotalByJudge(judge.id, criteriaIndex) }}
-                                </td>
                             </tr>
                         </tbody>
                         <tfoot class="bg-gray-200 dark:bg-gray-700 font-semibold text-gray-900 dark:text-gray-100">
@@ -106,9 +84,6 @@ const getTeamTotalByJudge = (teamId: number, judgeId: number) => {
                                 <td v-for="team in props.teams" :key="team.id"
                                     class="py-3 px-6 text-center text-black dark:text-white font-bold">
                                     {{ getTeamTotalByJudge(team.id, judge.id) }}
-                                </td>
-                                <td class="py-3 px-6 text-center text-black dark:text-white font-bold">
-                                    {{ getJudgeTotal(judge.id) }}
                                 </td>
                             </tr>
                         </tfoot>
