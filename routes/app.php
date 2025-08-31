@@ -49,7 +49,7 @@ Route::middleware(['auth'])
                 Route::delete('/{team_id}', 'destroy')->name('destroy');
             });
 
-        Route::prefix('gincanas/{gymkhana_id}/fases')
+        Route::prefix('gincanas/{gymkhana_id}/provas')
             ->name('gymkhana.phases.')
             ->controller(PhaseController::class)
             ->middleware(['admin'])

@@ -70,7 +70,7 @@ class GymkhanaResultService
         }
 
         if ($gymkhana->phases->isEmpty()) {
-            return back()->with('error', 'A gincana deve ter pelo menos uma fase cadastrada.');
+            return back()->with('error', 'A gincana deve ter pelo menos uma prova cadastrada.');
         }
 
         $gymkhanaResult = new GymkhanaResult();

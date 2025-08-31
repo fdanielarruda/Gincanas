@@ -8,7 +8,6 @@ import TableColocation from './TableColocation.vue';
 import TableChecklist from './TableChecklist.vue';
 import TableCriteriaResults from './TableCriteriaResults.vue';
 
-// Definições de tipos e constantes
 const TYPE_CRITERIA = 1;
 const TYPE_COLOCATION = 3;
 const TYPE_CHECKLIST = 4;
@@ -65,7 +64,6 @@ const state = reactive({
 const initialResults: { [key: number]: any } = {};
 const judgeId = props.user_id;
 
-// Lógica de inicialização do formulário
 if (props.teams && props.phases) {
     props.teams.forEach(team => {
         initialResults[team.id] = {};
@@ -78,7 +76,6 @@ if (props.teams && props.phases) {
                     initialResults[team.id][phase.id] = { [judgeId]: existingValues || Array(phase.criteria?.length).fill(null) };
                 }
             } else if (phase.type === TYPE_CHECKLIST) {
-                // CORREÇÃO AQUI: Acessa 'checklist_colocations' para inicializar
                 const initialPhaseResults: { [key: string]: number | null } = {};
                 phase.checklist_colocations?.forEach(colocation => {
                     const existingValue = (props.results?.[team.id]?.[phase.id] as { [key: string]: number })?.[colocation.place];
@@ -97,39 +94,20 @@ const currentPhase = computed(() => {
     return props.phases.find(p => p.id === state.activePhase);
 });
 
-// Inicialização do formulário
 const form = useForm({
     results: initialResults,
 });
 
 const submit = () => {
-    // CORREÇÃO AQUI: Clona o formulário para modificar antes de enviar
-    const dataToSend = JSON.parse(JSON.stringify(form.results));
-
-    // Remove o campo 'colocations' das fases do tipo 'checklist'
-    if (currentPhase.value && currentPhase.value.type === TYPE_CHECKLIST) {
-        for (const teamId in dataToSend) {
-            if (dataToSend[teamId][currentPhase.value.id]) {
-                // A lógica de remoção não é mais necessária com a abordagem de filtragem,
-                // mas você pode usá-la para sanar dados se precisar.
-                // Exemplo:
-                // delete dataToSend[teamId][currentPhase.value.id].colocations;
-            }
-        }
-    }
-
     form.put(route('results.update', { id: props.id }), {
-        onSuccess: () => {
-            console.log('Resultados salvos com sucesso!');
-        },
-        onError: (errors) => {
-            console.log('Erro ao salvar resultados:', errors);
-        }
+        onSuccess: () => console.log('Resultados salvos com sucesso!'),
+        onError: (errors) => console.log('Erro ao salvar resultados:', errors)
     });
 };
 </script>
 
 <template>
+
     <Head title="Gerenciar Resultados" />
 
     <AuthenticatedLayout>
@@ -141,7 +119,7 @@ const submit = () => {
                             'px-4 py-2 rounded-md transition-colors duration-200',
                             state.activePhase === phase.id ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
                         ]" :title="phase.title">
-                        Fase {{ index + 1 }}
+                        Prova {{ index + 1 }}
                     </button>
                 </div>
             </div>
@@ -180,7 +158,7 @@ const submit = () => {
         </div>
 
         <div v-else class="text-center text-gray-500 dark:text-gray-400">
-            <p>Esta gincana não possui fases ou equipes cadastradas para gerenciamento de resultados.
+            <p>Esta gincana não possui provas ou equipes cadastradas para gerenciamento de resultados.
             </p>
         </div>
     </AuthenticatedLayout>

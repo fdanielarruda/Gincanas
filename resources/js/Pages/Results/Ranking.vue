@@ -77,7 +77,7 @@ const hasAnyScores = computed(() => {
             <input type="checkbox" id="showPhaseScores" v-model="showPhaseScores"
                 class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
             <label for="showPhaseScores" class="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Exibir pontuação por fase
+                Exibir pontuação por prova
             </label>
         </div>
 

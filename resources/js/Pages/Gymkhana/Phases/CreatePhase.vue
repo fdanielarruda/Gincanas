@@ -27,12 +27,12 @@ const submit = (form: InertiaForm<PhaseFormFields>) => {
 
 <template>
 
-    <Head title="Adicionar Fase" />
+    <Head title="Adicionar Prova" />
 
     <AuthenticatedLayout>
         <PhaseForm :gymkhana-id="gymkhana.id" @form-submitted="submit">
             <template #buttonText>
-                Salvar Fase
+                Salvar Prova
             </template>
         </PhaseForm>
     </AuthenticatedLayout>

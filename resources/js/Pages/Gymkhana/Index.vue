@@ -79,7 +79,7 @@ const {
                             </IconButton>
 
                             <IconButton :href="route('gymkhana.phases.index', gymkhana.id)" class="ml-1" color="green"
-                                title="Fases">
+                                title="Provas">
                                 <RectangleStackIcon class="h-5 w-5" />
                             </IconButton>
 

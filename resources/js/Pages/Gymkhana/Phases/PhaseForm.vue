@@ -94,13 +94,13 @@ const submit = () => {
     <form @submit.prevent="submit">
         <div class="space-y-3">
             <div>
-                <InputLabel for="title" value="Título da Fase" />
+                <InputLabel for="title" value="Título da Prova" />
                 <TextInput id="title" type="text" class="mt-1 block w-full" v-model="form.title" required autofocus />
                 <InputError class="mt-2" :message="form.errors.title" />
             </div>
 
             <div>
-                <InputLabel for="description" value="Descrição da Fase" />
+                <InputLabel for="description" value="Descrição da Prova" />
                 <textarea id="description"
                     class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                     v-model="form.description" rows="4"></textarea>
@@ -108,7 +108,7 @@ const submit = () => {
             </div>
 
             <div>
-                <InputLabel for="type" value="Tipo de Fase" />
+                <InputLabel for="type" value="Tipo de Prova" />
                 <SelectInput id="type" v-model="form.type" class="mt-1 block w-full">
                     <option :value="TYPE_CRITERIA">Critérios</option>
                     <option :value="TYPE_COLOCATION">Colocação</option>

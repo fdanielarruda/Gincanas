@@ -60,12 +60,12 @@ const movePhase = (phase: Phase, direction: 'up' | 'down') => {
 
 <template>
 
-    <Head title="Fases" />
+    <Head title="Provas" />
 
     <AuthenticatedLayout>
         <div class="flex justify-end items-center mb-4">
             <TextButton :href="route('gymkhana.phases.create', gymkhana.id)" class="p-4">
-                Nova Fase
+                Nova Prova
             </TextButton>
             <TextButton :href="route('gymkhana.index')" class="p-4 ml-2" color="gray">
                 Voltar
@@ -78,7 +78,7 @@ const movePhase = (phase: Phase, direction: 'up' | 'down') => {
                     <tr>
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                            Fase</th>
+                            Prova</th>
                         <th scope="col" class="relative px-6 py-3 text-right"><span class="sr-only">Ações</span>
                         </th>
                     </tr>
@@ -105,7 +105,7 @@ const movePhase = (phase: Phase, direction: 'up' | 'down') => {
                                 title="Editar">
                                 <PencilSquareIcon class="h-5 w-5" />
                             </IconButton>
-                            <IconButton as="button" color="red" title="Remover Fase" class="ml-1"
+                            <IconButton as="button" color="red" title="Remover Prova" class="ml-1"
                                 @click.stop="openConfirmRemoveModal(phase)">
                                 <TrashIcon class="h-5 w-5" />
                             </IconButton>
@@ -115,11 +115,11 @@ const movePhase = (phase: Phase, direction: 'up' | 'down') => {
             </table>
         </div>
         <div v-else>
-            <p>Nenhuma fase encontrada.</p>
+            <p>Nenhuma prova encontrada.</p>
         </div>
     </AuthenticatedLayout>
 
-    <ConfirmDeletionModal :show="confirmingDeletion" title="Remover Fase"
-        :message="`Tem certeza que deseja remover a fase '${itemToDelete?.title}' desta gincana?`" @close="closeModal"
+    <ConfirmDeletionModal :show="confirmingDeletion" title="Remover Prova"
+        :message="`Tem certeza que deseja remover a prova '${itemToDelete?.title}' desta gincana?`" @close="closeModal"
         @confirm="removePhase" />
 </template>

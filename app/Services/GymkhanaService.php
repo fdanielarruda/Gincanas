@@ -152,7 +152,7 @@ class GymkhanaService
         });
 
         if ($currentIndex === false) {
-            throw new \Exception('Fase não encontrada na lista ordenada.');
+            throw new \Exception('Prova não encontrada na lista ordenada.');
         }
 
         $newIndex = $direction === 'up' ? $currentIndex - 1 : $currentIndex + 1;
