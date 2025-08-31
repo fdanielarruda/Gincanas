@@ -1,16 +1,11 @@
 <script setup lang="ts">
+import { Phase } from '@/types';
 import { defineProps } from 'vue';
 
 interface Team {
     id: number;
     title: string;
     participants: string[];
-}
-
-interface Phase {
-    id: number;
-    title: string;
-    criteria: string[] | null;
 }
 
 interface Judge {

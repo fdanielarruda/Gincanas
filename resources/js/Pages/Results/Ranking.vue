@@ -4,26 +4,12 @@ import { Head } from '@inertiajs/vue3';
 import ExternalLayout from '@/Layouts/ExternalLayout.vue';
 import { InformationCircleIcon } from '@heroicons/vue/24/solid';
 import { calculatePhaseScore, getRankedTeams } from '@/Utils/scoreCalculator';
+import { Phase } from '@/types';
 
 interface Team {
     id: number;
     title: string;
     participants: string[];
-}
-
-interface Colocation {
-    place: string;
-    points: number;
-}
-
-interface Phase {
-    id: number;
-    title: string;
-    type: number;
-    criteria: string[] | null;
-    colocations: Colocation[] | null;
-    checklist_colocations: Colocation[] | null;
-    description: string;
 }
 
 interface ResultData {

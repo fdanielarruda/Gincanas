@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Phase } from '@/types';
 import { useForm, Link } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
 
@@ -8,11 +9,6 @@ const USER_TYPE_JUDGE = 2;
 interface Team {
     id: number;
     title: string;
-}
-
-interface Phase {
-    id: number;
-    criteria: string[] | null;
 }
 
 interface Judge {

@@ -8,14 +8,28 @@ export interface User {
     type: number;
 }
 
+interface Colocation {
+    place: string;
+    points: number;
+}
+
+interface Gymkhana {
+    id: number;
+    title: string;
+    phases: Phase[];
+}
+
 interface Phase {
     id: number;
     title: string;
+    abbreviation: string;
+    description: string;
     type: number;
+    order: number | null;
     criteria: string[] | null;
     colocations: Colocation[] | null;
     checklist_colocations: Colocation[] | null;
-    description: string;
+    ginkhana: Gymkhana;
 }
 
 interface Team {
@@ -28,12 +42,6 @@ interface Judge {
     id: number;
     name: string;
 }
-
-interface Colocation {
-    place: string;
-    points: number;
-}
-
 export interface ResultData {
     [teamId: number]: {
         [phaseId: number]: any;

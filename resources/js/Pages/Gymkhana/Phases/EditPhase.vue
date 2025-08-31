@@ -2,18 +2,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, InertiaForm } from '@inertiajs/vue3';
 import PhaseForm from './PhaseForm.vue';
+import { Phase } from '@/types';
 
 interface Gymkhana {
     id: number;
-}
-
-interface Phase {
-    id: number;
-    title: string;
-    description: string;
-    type: number;
-    criteria?: string[];
-    colocations?: Array<{ place: string, points: number }>;
 }
 
 interface PhaseFormFields {

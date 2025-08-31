@@ -27,6 +27,7 @@ const props = defineProps({
         type: Object,
         default: () => ({
             title: '',
+            abbreviation: '',
             description: '',
             type: TYPE_CRITERIA,
             criteria: [''],
@@ -44,6 +45,7 @@ const emit = defineEmits(['form-submitted']);
 
 const form = useForm({
     title: props.initialData.title,
+    abbreviation: props.initialData.abbreviation,
     description: props.initialData.description,
     type: props.initialData.type,
     criteria: props.initialData.criteria,
@@ -97,6 +99,12 @@ const submit = () => {
                 <InputLabel for="title" value="Título da Prova" />
                 <TextInput id="title" type="text" class="mt-1 block w-full" v-model="form.title" required autofocus />
                 <InputError class="mt-2" :message="form.errors.title" />
+            </div>
+
+            <div>
+                <InputLabel for="abbreviation" value="Abreviação da Prova" />
+                <TextInput id="abbreviation" type="text" class="mt-1 block w-full" v-model="form.abbreviation" required autofocus />
+                <InputError class="mt-2" :message="form.errors.abbreviation" />
             </div>
 
             <div>

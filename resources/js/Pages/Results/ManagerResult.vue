@@ -7,6 +7,7 @@ import TableCriteria from './TableCriteria.vue';
 import TableColocation from './TableColocation.vue';
 import TableChecklist from './TableChecklist.vue';
 import TableCriteriaResults from './TableCriteriaResults.vue';
+import { Phase } from '@/types';
 
 const TYPE_CRITERIA = 1;
 const TYPE_COLOCATION = 3;
@@ -19,21 +20,6 @@ interface Team {
     id: number;
     title: string;
     participants: string[];
-}
-
-interface Colocation {
-    place: string;
-    points: number;
-}
-
-interface Phase {
-    id: number;
-    title: string;
-    type: number;
-    criteria: string[] | null;
-    colocations: Colocation[] | null;
-    checklist_colocations: Colocation[] | null;
-    description: string;
 }
 
 interface Judge {
@@ -82,7 +68,7 @@ if (props.teams && props.phases) {
                     initialPhaseResults[colocation.place] = existingValue !== undefined ? existingValue : null;
                 });
                 initialResults[team.id][phase.id] = initialPhaseResults;
-            } else { // Para TYPE_COLOCATION e outros
+            } else {
                 const existingValue = props.results?.[team.id]?.[phase.id];
                 initialResults[team.id][phase.id] = existingValue !== undefined ? existingValue : null;
             }
@@ -119,7 +105,7 @@ const submit = () => {
                             'px-4 py-2 rounded-md transition-colors duration-200',
                             state.activePhase === phase.id ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
                         ]" :title="phase.title">
-                        Prova {{ index + 1 }}
+                        {{ phase.abbreviation }}
                     </button>
                 </div>
             </div>

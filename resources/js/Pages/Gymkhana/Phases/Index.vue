@@ -6,22 +6,12 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { PencilSquareIcon, TrashIcon, ArrowUpCircleIcon, ArrowDownCircleIcon } from '@heroicons/vue/24/solid';
 import ConfirmDeletionModal from '@/Components/ConfirmDeletionModal.vue';
 import { useDeleter } from '@/Composables/useDeleter';
+import { Phase } from '@/types';
 
 interface Gymkhana {
     id: number;
     title: string;
     phases: Phase[];
-}
-
-interface Phase {
-    id: number;
-    title: string;
-    description: string;
-    type: number;
-    criteria: string[];
-    colocations: { place: string, points: number }[];
-    checklist_colocations?: { place: string, points: number }[];
-    order: number | null;
 }
 
 const props = defineProps<{
@@ -79,6 +69,9 @@ const movePhase = (phase: Phase, direction: 'up' | 'down') => {
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                             Prova</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+                            Abv.</th>
                         <th scope="col" class="relative px-6 py-3 text-right"><span class="sr-only">Ações</span>
                         </th>
                     </tr>
@@ -90,6 +83,11 @@ const movePhase = (phase: Phase, direction: 'up' | 'down') => {
                                 <span class="font-bold">{{ phase.title }}</span>
                                 <span class="text-sm text-gray-600 dark:text-gray-400">{{
                                     phase.description }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-normal">
+                            <div class="flex flex-col">
+                                <span class="font-bold">{{ phase.abbreviation }}</span>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

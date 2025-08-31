@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Phase } from '@/types';
 import { useForm } from '@inertiajs/vue3';
 import { defineProps, computed } from 'vue';
 
@@ -11,16 +12,6 @@ interface Team {
 interface Colocation {
     place: string;
     points: number;
-}
-
-interface Phase {
-    id: number;
-    title: string;
-    type: number;
-    criteria: string[] | null;
-    colocations: Colocation[] | null;
-    checklist_colocations: Colocation[] | null;
-    description: string;
 }
 
 const props = defineProps<{

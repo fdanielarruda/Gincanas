@@ -1,14 +1,11 @@
 <script setup lang="ts">
+import { Phase } from '@/types';
 import { useForm } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
 
 interface Team {
     id: number;
     title: string;
-}
-
-interface Phase {
-    id: number;
 }
 
 const props = defineProps<{
