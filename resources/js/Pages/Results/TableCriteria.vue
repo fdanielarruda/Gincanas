@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Phase } from '@/types';
+import { InformationCircleIcon } from '@heroicons/vue/24/solid';
 import { useForm } from '@inertiajs/vue3';
 import { defineProps, ref, onMounted, onUnmounted, computed } from 'vue';
 
@@ -64,8 +65,19 @@ const getTeamTotalByJudge = (teamId: number, judgeId: number) => {
                             Critérios
                         </th>
                         <th v-for="team in teams" :key="team.id"
-                            class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            {{ team.title }}
+                            class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider relative">
+                            <div class="flex items-center justify-center">
+                                {{ team.title }}
+
+                                <div class="group relative ml-1">
+                                    <InformationCircleIcon
+                                        class="h-4 w-4 text-gray-400 dark:text-gray-500 cursor-pointer" />
+                                    <div
+                                        class="absolute right-0 top-full mt-2 w-max p-2 text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                                        {{ team.participants.join(', ') }}
+                                    </div>
+                                </div>
+                            </div>
                         </th>
                     </tr>
                 </thead>
