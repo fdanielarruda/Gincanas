@@ -7,31 +7,14 @@ import TableCriteria from './TableCriteria.vue';
 import TableColocation from './TableColocation.vue';
 import TableChecklist from './TableChecklist.vue';
 import TableCriteriaResults from './TableCriteriaResults.vue';
-import { Phase } from '@/types';
+import { Phase, Team, Judge, ResultData } from '@/types';
+import { validateForm } from '@/Utils/formValidationUtils';
 
 const TYPE_CRITERIA = 1;
 const TYPE_COLOCATION = 3;
 const TYPE_CHECKLIST = 4;
-
 const USER_TYPE_ADMIN = 1;
 const USER_TYPE_JUDGE = 2;
-
-interface Team {
-    id: number;
-    title: string;
-    participants: string[];
-}
-
-interface Judge {
-    id: number;
-    name: string;
-}
-
-interface ResultData {
-    [teamId: number]: {
-        [phaseId: number]: any;
-    };
-}
 
 const props = defineProps<{
     id: number;
@@ -78,6 +61,19 @@ if (props.teams && props.phases) {
 
 const currentPhase = computed(() => {
     return props.phases.find(p => p.id === state.activePhase);
+});
+
+const isFormIncomplete = computed(() => {
+    if (!currentPhase.value) {
+        return true;
+    }
+    return validateForm(
+        props.teams,
+        currentPhase.value,
+        form.results,
+        props.user_type,
+        judgeId
+    );
 });
 
 const form = useForm({
@@ -136,7 +132,7 @@ const submit = () => {
                 </div>
 
                 <div class="flex items-center justify-end mt-6 space-x-4">
-                    <TextButton :disabled="form.processing" class="p-4">
+                    <TextButton :disabled="form.processing || isFormIncomplete" class="p-4">
                         Salvar Resultados
                     </TextButton>
                 </div>
