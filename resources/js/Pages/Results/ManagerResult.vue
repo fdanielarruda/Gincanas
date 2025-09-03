@@ -46,7 +46,10 @@ const getInitialResults = () => {
             localStorage.removeItem(localStorageKey);
         }
     }
+    return initializeFromProps();
+};
 
+const initializeFromProps = () => {
     const initialResults: { [key: number]: any } = {};
     if (props.teams && props.phases) {
         props.teams.forEach(team => {
@@ -103,10 +106,10 @@ watch(() => form.results, (newResults) => {
 
 const submit = () => {
     form.put(route('results.update', { id: props.id }), {
-        onSuccess: () => {
+        onSuccess: (page) => {
             console.log('Resultados salvos com sucesso!');
             localStorage.removeItem(localStorageKey);
-            form.reset();
+            form.results = page.props.results;
         },
         onError: (errors) => console.log('Erro ao salvar resultados:', errors)
     });
@@ -115,7 +118,7 @@ const submit = () => {
 const handleBeforeUnload = (event: BeforeUnloadEvent) => {
     if (form.isDirty) {
         event.preventDefault();
-        event.returnValue = ''; 
+        event.returnValue = '';
     }
 };
 
@@ -129,6 +132,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+
     <Head title="Gerenciar Resultados" />
 
     <AuthenticatedLayout>
