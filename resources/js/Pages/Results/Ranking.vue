@@ -80,7 +80,7 @@ const hasAnyScores = computed(() => {
                                 <th class="py-1 px-2 font-bold text-right min-w-[80px] relative">
                                     <div class="flex items-center justify-end">
                                         <span>{{ phase.abbreviation }}</span>
-                                        <div class="group relative ml-1">
+                                        <div class="group relative ml-1 no-print">
                                             <InformationCircleIcon
                                                 class="h-4 w-4 text-gray-400 dark:text-gray-500 cursor-pointer" />
                                             <div
@@ -112,7 +112,7 @@ const hasAnyScores = computed(() => {
                                 :key="`row-${team.id}-${phase.id}`">
                                 <td class="py-1 px-2 text-right">{{ calculatePhaseScore(team.id, phase,
                                     props.results, props.teams)
-                                    }}
+                                }}
                                 </td>
                             </template>
 
