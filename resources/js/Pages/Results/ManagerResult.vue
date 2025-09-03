@@ -168,7 +168,7 @@ onUnmounted(() => {
 
                     <TableCriteria v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_JUDGE"
                         :phase="currentPhase" :teams="props.teams" :form="form" :user_id="props.user_id"
-                        :user_type="props.user_type" :judges="props.judges" />
+                        :user_type="props.user_type" :judges="props.judges" :is_form_incomplete="isFormIncomplete" />
 
                     <TableCriteriaResults v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_ADMIN"
                         :phase="currentPhase" :teams="props.teams" :results="results" :judges="props.judges" />

@@ -22,6 +22,7 @@ const props = defineProps<{
     user_id: number;
     user_type: number;
     judges: Judge[];
+    is_form_incomplete: boolean;
 }>();
 
 const isMobile = ref(false);
@@ -101,7 +102,8 @@ const getTeamTotalByJudge = (teamId: number, judgeId: number) => {
                         <td class="py-3 px-6">Total</td>
                         <td v-for="team in props.teams" :key="team.id"
                             class="py-3 px-6 text-center text-black dark:text-white font-bold">
-                            {{ getTeamTotalByJudge(team.id, props.user_id) }}
+                            <span v-if="!is_form_incomplete"> {{ getTeamTotalByJudge(team.id, props.user_id) }}</span>
+                            <span v-else>-</span>
                         </td>
                     </tr>
                 </tfoot>
@@ -127,8 +129,11 @@ const getTeamTotalByJudge = (teamId: number, judgeId: number) => {
                 </div>
                 <div class="mt-2 p-1 font-semibold flex justify-between">
                     <span class="text-gray-900 dark:text-gray-100">Total:</span>
-                    <span class="text-black dark:text-white font-bold">
+                    <span class="text-black dark:text-white font-bold" v-if="!is_form_incomplete">
                         {{ getTeamTotalByJudge(team.id, props.user_id) }}
+                    </span>
+                    <span v-else>
+                        -
                     </span>
                 </div>
             </div>
