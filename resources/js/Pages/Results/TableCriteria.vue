@@ -22,7 +22,6 @@ const props = defineProps<{
     user_id: number;
     user_type: number;
     judges: Judge[];
-    is_form_incomplete: boolean;
 }>();
 
 const isMobile = ref(false);
@@ -52,6 +51,22 @@ const getTeamTotalByJudge = (teamId: number, judgeId: number) => {
         return sum;
     });
     return total.value;
+};
+
+const isTeamIncomplete = (teamId: number): boolean => {
+    const judgeScores = props.form.results?.[teamId]?.[props.phase.id]?.[props.user_id];
+
+    if (!judgeScores) {
+        return true;
+    }
+
+    for (const score of judgeScores) {
+        if (score === null || score === undefined || score === '') {
+            return true;
+        }
+    }
+
+    return false;
 };
 </script>
 
@@ -102,7 +117,9 @@ const getTeamTotalByJudge = (teamId: number, judgeId: number) => {
                         <td class="py-3 px-6">Total</td>
                         <td v-for="team in props.teams" :key="team.id"
                             class="py-3 px-6 text-center text-black dark:text-white font-bold">
-                            <span v-if="!is_form_incomplete"> {{ getTeamTotalByJudge(team.id, props.user_id) }}</span>
+                            <span v-if="!isTeamIncomplete(team.id)">
+                                {{ getTeamTotalByJudge(team.id, props.user_id) }}
+                            </span>
                             <span v-else>-</span>
                         </td>
                     </tr>
@@ -129,7 +146,7 @@ const getTeamTotalByJudge = (teamId: number, judgeId: number) => {
                 </div>
                 <div class="mt-2 p-1 font-semibold flex justify-between">
                     <span class="text-gray-900 dark:text-gray-100">Total:</span>
-                    <span class="text-black dark:text-white font-bold" v-if="!is_form_incomplete">
+                    <span class="text-black dark:text-white font-bold" v-if="!isTeamIncomplete(team.id)">
                         {{ getTeamTotalByJudge(team.id, props.user_id) }}
                     </span>
                     <span v-else>
