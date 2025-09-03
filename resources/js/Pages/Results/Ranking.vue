@@ -130,6 +130,11 @@ const hasAnyScores = computed(() => {
 
 <style>
 @media print {
+    @page {
+        size: landscape;
+        margin: 0;
+    }
+
     body {
         margin: 0;
         padding: 0;
@@ -142,17 +147,18 @@ const hasAnyScores = computed(() => {
     table {
         width: 100% !important;
         font-size: 8pt !important;
+        border-collapse: collapse;
     }
 
     th,
     td {
-        padding: 2px 4px !important;
+        padding: 1px 2px !important;
         word-wrap: break-word;
         white-space: normal !important;
     }
 
     .text-sm {
-        font-size: 10px;
+        font-size: 8px !important;
     }
 }
 </style>
