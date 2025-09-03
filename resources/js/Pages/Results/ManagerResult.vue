@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, computed } from 'vue';
+import { reactive, computed, watch, onMounted, onUnmounted } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import TextButton from '@/Components/Itens/TextButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
@@ -30,34 +30,55 @@ const state = reactive({
     activePhase: props.phases[0] ? props.phases[0].id : null,
 });
 
-const initialResults: { [key: number]: any } = {};
 const judgeId = props.user_id;
+const localStorageKey = `form_results_event_${props.id}_judge_${judgeId}`;
 
-if (props.teams && props.phases) {
-    props.teams.forEach(team => {
-        initialResults[team.id] = {};
-        props.phases.forEach(phase => {
-            if (phase.type === TYPE_CRITERIA) {
-                if (props.user_type === USER_TYPE_ADMIN) {
-                    initialResults[team.id][phase.id] = props.results?.[team.id]?.[phase.id] || {};
-                } else {
-                    const existingValues = props.results?.[team.id]?.[phase.id]?.[judgeId];
-                    initialResults[team.id][phase.id] = { [judgeId]: existingValues || Array(phase.criteria?.length).fill(null) };
-                }
-            } else if (phase.type === TYPE_CHECKLIST) {
-                const initialPhaseResults: { [key: string]: number | null } = {};
-                phase.checklist_colocations?.forEach(colocation => {
-                    const existingValue = (props.results?.[team.id]?.[phase.id] as { [key: string]: number })?.[colocation.place];
-                    initialPhaseResults[colocation.place] = existingValue !== undefined ? existingValue : null;
-                });
-                initialResults[team.id][phase.id] = initialPhaseResults;
-            } else {
-                const existingValue = props.results?.[team.id]?.[phase.id];
-                initialResults[team.id][phase.id] = existingValue !== undefined ? existingValue : null;
+const getInitialResults = () => {
+    const savedResults = localStorage.getItem(localStorageKey);
+    if (savedResults) {
+        try {
+            const parsedResults = JSON.parse(savedResults);
+            if (Object.keys(parsedResults).length === props.teams.length) {
+                return parsedResults;
             }
+        } catch (e) {
+            console.error('Erro ao analisar dados do localStorage:', e);
+            localStorage.removeItem(localStorageKey);
+        }
+    }
+
+    const initialResults: { [key: number]: any } = {};
+    if (props.teams && props.phases) {
+        props.teams.forEach(team => {
+            initialResults[team.id] = {};
+            props.phases.forEach(phase => {
+                if (phase.type === TYPE_CRITERIA) {
+                    if (props.user_type === USER_TYPE_ADMIN) {
+                        initialResults[team.id][phase.id] = props.results?.[team.id]?.[phase.id] || {};
+                    } else {
+                        const existingValues = props.results?.[team.id]?.[phase.id]?.[judgeId];
+                        initialResults[team.id][phase.id] = { [judgeId]: existingValues || Array(phase.criteria?.length).fill(null) };
+                    }
+                } else if (phase.type === TYPE_CHECKLIST) {
+                    const initialPhaseResults: { [key: string]: number | null } = {};
+                    phase.checklist_colocations?.forEach(colocation => {
+                        const existingValue = (props.results?.[team.id]?.[phase.id] as { [key: string]: number })?.[colocation.place];
+                        initialPhaseResults[colocation.place] = existingValue !== undefined ? existingValue : null;
+                    });
+                    initialResults[team.id][phase.id] = initialPhaseResults;
+                } else {
+                    const existingValue = props.results?.[team.id]?.[phase.id];
+                    initialResults[team.id][phase.id] = existingValue !== undefined ? existingValue : null;
+                }
+            });
         });
-    });
-}
+    }
+    return initialResults;
+};
+
+const form = useForm({
+    results: getInitialResults(),
+});
 
 const currentPhase = computed(() => {
     return props.phases.find(p => p.id === state.activePhase);
@@ -76,20 +97,38 @@ const isFormIncomplete = computed(() => {
     );
 });
 
-const form = useForm({
-    results: initialResults,
-});
+watch(() => form.results, (newResults) => {
+    localStorage.setItem(localStorageKey, JSON.stringify(newResults));
+}, { deep: true });
 
 const submit = () => {
     form.put(route('results.update', { id: props.id }), {
-        onSuccess: () => console.log('Resultados salvos com sucesso!'),
+        onSuccess: () => {
+            console.log('Resultados salvos com sucesso!');
+            localStorage.removeItem(localStorageKey);
+            form.reset();
+        },
         onError: (errors) => console.log('Erro ao salvar resultados:', errors)
     });
 };
+
+const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+    if (form.isDirty) {
+        event.preventDefault();
+        event.returnValue = ''; 
+    }
+};
+
+onMounted(() => {
+    window.addEventListener('beforeunload', handleBeforeUnload);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+});
 </script>
 
 <template>
-
     <Head title="Gerenciar Resultados" />
 
     <AuthenticatedLayout>
@@ -115,6 +154,11 @@ const submit = () => {
                         <p class="text-sm text-gray-600 dark:text-gray-400" v-html="currentPhase.description"></p>
                     </div>
 
+                    <div v-if="form.isDirty"
+                        class="mt-4 p-3 bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-100 rounded-md text-sm font-medium border border-yellow-200 dark:border-yellow-700">
+                        Aviso: Existem resultados não salvos. Salve antes de sair para não perder os dados.
+                    </div>
+
                     <TableCriteria v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_JUDGE"
                         :phase="currentPhase" :teams="props.teams" :form="form" :user_id="props.user_id"
                         :user_type="props.user_type" :judges="props.judges" />
@@ -138,8 +182,7 @@ const submit = () => {
         </div>
 
         <div v-else class="text-center text-gray-500 dark:text-gray-400">
-            <p>Esta gincana não possui provas ou equipes cadastradas para gerenciamento de resultados.
-            </p>
+            <p>Esta gincana não possui provas ou equipes cadastradas para gerenciamento de resultados.</p>
         </div>
     </AuthenticatedLayout>
 </template>
