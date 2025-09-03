@@ -91,13 +91,16 @@ const isFormIncomplete = computed(() => {
     if (!currentPhase.value) {
         return true;
     }
-    return validateForm(
-        props.teams,
-        currentPhase.value,
-        form.results,
-        props.user_type,
-        judgeId
-    );
+    if (currentPhase.value.type === TYPE_CRITERIA) {
+        return validateForm(
+            props.teams,
+            currentPhase.value,
+            form.results,
+            props.user_type,
+            judgeId
+        );
+    }
+    return false;
 });
 
 watch(() => form.results, (newResults) => {
@@ -158,7 +161,7 @@ onUnmounted(() => {
                         <p class="text-sm text-gray-600 dark:text-gray-400" v-html="currentPhase.description"></p>
                     </div>
 
-                    <div v-if="form.isDirty"
+                    <div v-if="form.isDirty && user_type === USER_TYPE_JUDGE"
                         class="mt-4 p-3 bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-100 rounded-md text-sm font-medium border border-yellow-200 dark:border-yellow-700">
                         Aviso: Existem resultados não salvos. Salve antes de sair para não perder os dados.
                     </div>
@@ -175,12 +178,13 @@ onUnmounted(() => {
 
                     <TableChecklist v-if="currentPhase.type === TYPE_CHECKLIST" :phase="currentPhase"
                         :teams="props.teams" :form="form" />
-                </div>
 
-                <div class="flex items-center justify-end mt-6 space-x-4">
-                    <TextButton :disabled="form.processing || isFormIncomplete" class="p-4">
-                        Salvar Resultados
-                    </TextButton>
+                    <div class="flex items-center justify-end mt-6 space-x-4">
+                        <TextButton v-if="currentPhase.type !== TYPE_CRITERIA || user_type === USER_TYPE_JUDGE"
+                            :disabled="form.processing || isFormIncomplete" class="p-4">
+                            Salvar Resultados
+                        </TextButton>
+                    </div>
                 </div>
             </form>
         </div>
