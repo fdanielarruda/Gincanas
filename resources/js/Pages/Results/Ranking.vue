@@ -98,7 +98,7 @@ const hasAnyScores = computed(() => {
                     <tbody>
                         <tr v-for="(team, index) in rankedTeams" :key="team.id"
                             :class="{ 'bg-gray-50 dark:bg-gray-700': index % 2 === 0, 'bg-white dark:bg-gray-800': index % 2 !== 0 }">
-                            <td class="py-1 px-2">{{ index + 1 }}º</td>
+                            <td class="py-1 px-2 text-center">{{ index + 1 }}º</td>
                             <td class="px-2 py-2 whitespace-normal">
                                 <div class="flex flex-col">
                                     <span>{{ team.title }}</span>
@@ -146,36 +146,51 @@ const hasAnyScores = computed(() => {
 
     table {
         width: 100% !important;
-        font-size: 7pt !important;
+        font-size: 10pt !important;
         border-collapse: collapse;
-        table-layout: fixed;
+        table-layout: fixed !important;
+        text-align: center;
     }
 
     th,
     td {
-        padding: 1px 2px !important;
+        padding: 1px !important;
         word-wrap: break-word;
         white-space: normal !important;
-        width: auto;
+        border: 1px solid #ccc;
+        text-align: center !important;
     }
 
-    th:nth-child(1),
-    td:nth-child(1) {
-        width: 5%;
+    th:first-child,
+    td:first-child {
+        text-align: left;
     }
 
     th:nth-child(2),
     td:nth-child(2) {
+        text-align: left !important;
+    }
+
+    th:nth-child(1) {
+        width: 5%;
+    }
+
+    th:nth-child(2) {
         width: 25%;
     }
 
     th:not(:nth-child(1)):not(:nth-child(2)),
     td:not(:nth-child(1)):not(:nth-child(2)) {
-        width: 10%;
+        width: 7%;
     }
 
     .text-sm {
-        font-size: 8px !important;
+        font-size: 7px !important;
+    }
+
+    .flex.items-center.justify-end {
+        display: block;
+        text-align: center !important;
     }
 }
 </style>
