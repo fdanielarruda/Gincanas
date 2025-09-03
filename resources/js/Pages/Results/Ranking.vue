@@ -112,7 +112,7 @@ const hasAnyScores = computed(() => {
                                 :key="`row-${team.id}-${phase.id}`">
                                 <td class="py-1 px-2 text-right">{{ calculatePhaseScore(team.id, phase,
                                     props.results, props.teams)
-                                }}
+                                    }}
                                 </td>
                             </template>
 
@@ -146,8 +146,9 @@ const hasAnyScores = computed(() => {
 
     table {
         width: 100% !important;
-        font-size: 8pt !important;
+        font-size: 7pt !important;
         border-collapse: collapse;
+        table-layout: fixed;
     }
 
     th,
@@ -155,6 +156,22 @@ const hasAnyScores = computed(() => {
         padding: 1px 2px !important;
         word-wrap: break-word;
         white-space: normal !important;
+        width: auto;
+    }
+
+    th:nth-child(1),
+    td:nth-child(1) {
+        width: 5%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 25%;
+    }
+
+    th:not(:nth-child(1)):not(:nth-child(2)),
+    td:not(:nth-child(1)):not(:nth-child(2)) {
+        width: 10%;
     }
 
     .text-sm {
