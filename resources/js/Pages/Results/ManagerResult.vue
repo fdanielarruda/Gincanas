@@ -9,6 +9,7 @@ import TableChecklist from './TableChecklist.vue';
 import TableCriteriaResults from './TableCriteriaResults.vue';
 import { Phase, Team, Judge, ResultData } from '@/types';
 import { validateForm } from '@/Utils/formValidationUtils';
+import TableColocationResults from './TableColocationResults.vue';
 
 const TYPE_CRITERIA = 1;
 const TYPE_COLOCATION = 3;
@@ -38,7 +39,9 @@ const getInitialResults = () => {
     if (savedResults) {
         try {
             const parsedResults = JSON.parse(savedResults);
-            if (Object.keys(parsedResults).length === props.teams.length) {
+            // Aumenta a tolerância do check do localStorage.
+            // Agora, ele verifica se existem resultados salvos.
+            if (Object.keys(parsedResults).length > 0) {
                 return parsedResults;
             }
         } catch (e) {
@@ -55,23 +58,23 @@ const initializeFromProps = () => {
         props.teams.forEach(team => {
             initialResults[team.id] = {};
             props.phases.forEach(phase => {
-                if (phase.type === TYPE_CRITERIA) {
+                if (phase.type === TYPE_CRITERIA || phase.type === TYPE_COLOCATION) {
                     if (props.user_type === USER_TYPE_ADMIN) {
+                        // Admin: carrega todos os resultados de todos os juízes
                         initialResults[team.id][phase.id] = props.results?.[team.id]?.[phase.id] || {};
                     } else {
+                        // Juiz: carrega apenas os resultados do seu ID
                         const existingValues = props.results?.[team.id]?.[phase.id]?.[judgeId];
                         initialResults[team.id][phase.id] = { [judgeId]: existingValues || Array(phase.criteria?.length).fill(null) };
                     }
                 } else if (phase.type === TYPE_CHECKLIST) {
+                    // Juiz e Admin: resultados de checklist são compartilhados
                     const initialPhaseResults: { [key: string]: number | null } = {};
                     phase.checklist_colocations?.forEach(colocation => {
                         const existingValue = (props.results?.[team.id]?.[phase.id] as { [key: string]: number })?.[colocation.place];
                         initialPhaseResults[colocation.place] = existingValue !== undefined ? existingValue : null;
                     });
                     initialResults[team.id][phase.id] = initialPhaseResults;
-                } else {
-                    const existingValue = props.results?.[team.id]?.[phase.id];
-                    initialResults[team.id][phase.id] = existingValue !== undefined ? existingValue : null;
                 }
             });
         });
@@ -173,15 +176,19 @@ onUnmounted(() => {
                     <TableCriteriaResults v-if="currentPhase.type === TYPE_CRITERIA && user_type === USER_TYPE_ADMIN"
                         :phase="currentPhase" :teams="props.teams" :results="results" :judges="props.judges" />
 
-                    <TableColocation v-if="currentPhase.type === TYPE_COLOCATION" :phase="currentPhase"
-                        :teams="props.teams" :form="form" />
+                    <TableColocation v-if="currentPhase.type === TYPE_COLOCATION && user_type === USER_TYPE_JUDGE"
+                        :phase="currentPhase" :teams="props.teams" :form="form" :user_id="props.user_id" />
+
+                    <TableColocationResults
+                        v-if="currentPhase.type === TYPE_COLOCATION && user_type === USER_TYPE_ADMIN"
+                        :phase="currentPhase" :teams="props.teams" :results="props.results" :judges="props.judges" />
 
                     <TableChecklist v-if="currentPhase.type === TYPE_CHECKLIST" :phase="currentPhase"
                         :teams="props.teams" :form="form" />
 
                     <div class="flex items-center justify-end mt-6 space-x-4">
-                        <TextButton v-if="currentPhase.type !== TYPE_CRITERIA || user_type === USER_TYPE_JUDGE"
-                            :disabled="form.processing || isFormIncomplete" class="p-4">
+                        <TextButton v-if="user_type === USER_TYPE_JUDGE" :disabled="form.processing || isFormIncomplete"
+                            class="p-4">
                             Salvar Resultados
                         </TextButton>
                     </div>

@@ -20,6 +20,7 @@ const calculateRankedPoints = (teams: Team[], phase: Phase, results: ResultData)
 
         const phaseResult = teamResults[phase.id];
 
+        // Esta função agora lida apenas com TYPE_CHECKLIST
         if (phase.type === TYPE_CHECKLIST && phase.checklist_colocations) {
             if (phaseResult && typeof phaseResult === 'object') {
                 for (const colocationPlace in phaseResult) {
@@ -30,9 +31,10 @@ const calculateRankedPoints = (teams: Team[], phase: Phase, results: ResultData)
                     }
                 }
             }
-        } else {
-            phaseScore = Number(phaseResult) || 0;
         }
+
+        // A lógica de Colocation foi movida para calculatePhaseScore
+        // A função calculateRankedPoints não é mais usada para isso
 
         return { ...team, phaseScore };
     });
@@ -57,20 +59,22 @@ export const calculatePhaseScore = (teamId: number, phase: Phase, results: Resul
         return 0;
     }
 
-    if (phase.type === TYPE_CRITERIA) {
+    if (phase.type === TYPE_CRITERIA || phase.type === TYPE_COLOCATION) {
         let score = 0;
         if (typeof teamResults === 'object' && teamResults !== null) {
             for (const judgeId in teamResults) {
                 const judgeScores = teamResults[judgeId];
-                if (Array.isArray(judgeScores)) {
+                if (Array.isArray(judgeScores)) { // Lógica para Critérios
                     for (const s of judgeScores) {
                         score += Number(s) || 0;
                     }
+                } else { // Lógica para Colocação
+                    score += Number(judgeScores) || 0;
                 }
             }
         }
         return score;
-    } else if (phase.type === TYPE_CHECKLIST || phase.type === TYPE_COLOCATION) {
+    } else if (phase.type === TYPE_CHECKLIST) {
         const rankedPoints = calculateRankedPoints(teams, phase, results);
         return rankedPoints[teamId] || 0;
     }

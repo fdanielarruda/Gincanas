@@ -34,21 +34,10 @@ class GymkhanaResultService
         $result = GymkhanaResult::findOrFail($id);
         $user = Auth::user();
 
-        $allPhases = collect($result->phases);
-        $filteredPhases = collect([]);
-
-        if ($user && $user->type == User::TYPE_JUDGE) {
-            $filteredPhases = $allPhases->filter(fn($phase) => $phase['type'] === 1);
-        }
-
-        if ($user && $user->type == User::TYPE_ADMIN) {
-            $filteredPhases = $allPhases;
-        }
-
         return [
             'id' => $result->id,
             'teams' => $result->teams,
-            'phases' => $filteredPhases->values()->toArray(),
+            'phases' => $result->phases,
             'results' => $result->results,
             'user_id' => $user->id,
             'user_type' => $user->type,
@@ -86,23 +75,20 @@ class GymkhanaResultService
     public function update(int $id, array $data)
     {
         $gymkhanaResult = GymkhanaResult::findOrFail($id);
-
         $user = Auth::user();
         $userType = $user->type;
-
         $newResults = $data['results'];
-
         $currentResults = $gymkhanaResult->results ?? [];
 
         foreach ($newResults as $teamId => $teamResults) {
+            if (!isset($currentResults[$teamId])) {
+                $currentResults[$teamId] = [];
+            }
+
             foreach ($teamResults as $phaseId => $phaseResults) {
                 $phase = collect($gymkhanaResult->phases)->firstWhere('id', $phaseId);
 
                 if (!$phase) {
-                    continue;
-                }
-
-                if ($userType === User::TYPE_JUDGE && $phase['type'] !== 1) {
                     continue;
                 }
 
@@ -111,9 +97,18 @@ class GymkhanaResultService
                     continue;
                 }
 
-                if ($userType === User::TYPE_JUDGE && $phase['type'] === 1) {
+                if ($userType === User::TYPE_JUDGE) {
                     $judgeId = $user->id;
-                    $currentResults[$teamId][$phaseId][$judgeId] = $phaseResults[$judgeId];
+
+                    if (!isset($currentResults[$teamId][$phaseId])) {
+                        $currentResults[$teamId][$phaseId] = [];
+                    }
+
+                    if ($phase['type'] === 1) {
+                        $currentResults[$teamId][$phaseId][$judgeId] = $phaseResults[$judgeId];
+                    } elseif ($phase['type'] === 3) {
+                        $currentResults[$teamId][$phaseId][$judgeId] = $phaseResults[$judgeId];
+                    }
                 }
             }
         }

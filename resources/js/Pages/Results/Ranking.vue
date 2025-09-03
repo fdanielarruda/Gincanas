@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, reactive } from 'vue';
+import { ref, computed, watch, onMounted, reactive, onBeforeUnmount } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import ExternalLayout from '@/Layouts/ExternalLayout.vue';
 import { InformationCircleIcon } from '@heroicons/vue/24/solid';
 import { calculatePhaseScore, getRankedTeams } from '@/Utils/scoreCalculator';
 import TableCriteriaDetails from './TableCriteriaDetails.vue';
+import TableColocationDetails from './TableColocationDetails.vue';
 import { Phase, Team, ResultData, Judge } from '@/types';
 
 const TYPE_CRITERIA = 1;
+const TYPE_COLOCATION = 3;
 
 const props = defineProps<{
     id: number;
@@ -24,10 +26,8 @@ const props = defineProps<{
 
 const showPhaseScores = ref(false);
 
-// Novo estado reativo para controlar o colapso de cada fase
 const collapsedPhases = reactive<{ [key: number]: boolean }>({});
 
-// Variável para controlar a exibição na impressão
 const isPrinting = ref(false);
 
 onMounted(() => {
@@ -35,18 +35,14 @@ onMounted(() => {
     if (savedState !== null) {
         showPhaseScores.value = JSON.parse(savedState);
     }
-    // Inicializa todas as fases como colapsadas
     props.phases.forEach(phase => {
         collapsedPhases[phase.id] = true;
     });
 
-    // Adiciona listener para o evento de impressão
     window.addEventListener('beforeprint', handleBeforePrint);
     window.addEventListener('afterprint', handleAfterPrint);
 });
 
-// Limpa os listeners ao desmontar o componente
-import { onBeforeUnmount } from 'vue';
 onBeforeUnmount(() => {
     window.removeEventListener('beforeprint', handleBeforePrint);
     window.removeEventListener('afterprint', handleAfterPrint);
@@ -77,7 +73,6 @@ const toggleCollapse = (phaseId: number) => {
  */
 const handleBeforePrint = () => {
     isPrinting.value = true;
-    // Expande todas as fases para a impressão
     props.phases.forEach(phase => {
         collapsedPhases[phase.id] = false;
     });
@@ -88,7 +83,6 @@ const handleBeforePrint = () => {
  */
 const handleAfterPrint = () => {
     isPrinting.value = false;
-    // Colapsa todas as fases novamente
     props.phases.forEach(phase => {
         collapsedPhases[phase.id] = true;
     });
@@ -171,8 +165,8 @@ const handleAfterPrint = () => {
         <div v-if="hasAnyScores" class="mt-8">
             <h3 class="text-xl font-bold mb-4 no-print">Detalhes da Pontuação por Prova</h3>
             <div v-for="phase in props.phases" :key="`details-${phase.id}`"
-                :class="{ 'print-page-break': phase.type === TYPE_CRITERIA }">
-                <div v-if="phase.type === TYPE_CRITERIA" class="mb-4">
+                :class="{ 'print-page-break': phase.type === TYPE_CRITERIA || phase.type === TYPE_COLOCATION }">
+                <div v-if="phase.type === TYPE_CRITERIA || phase.type === TYPE_COLOCATION" class="mb-4">
                     <div class="print-phase-header-only">
                         <h3>{{ phase.title }} ({{ phase.abbreviation }})</h3>
                     </div>
@@ -193,8 +187,10 @@ const handleAfterPrint = () => {
                     </div>
 
                     <div v-show="!collapsedPhases[phase.id] || isPrinting">
-                        <TableCriteriaDetails :phase="phase" :teams="props.teams" :judges="props.judges"
-                            :results="props.results" />
+                        <TableCriteriaDetails v-if="phase.type === TYPE_CRITERIA" :phase="phase" :teams="props.teams"
+                            :judges="props.judges" :results="props.results" />
+                        <TableColocationDetails v-else-if="phase.type === TYPE_COLOCATION" :phase="phase"
+                            :teams="props.teams" :judges="props.judges" :results="props.results" />
                     </div>
                 </div>
             </div>
