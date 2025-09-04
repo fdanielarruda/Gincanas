@@ -9,6 +9,7 @@ class UserService
     public function getJudges()
     {
         return User::where('type', User::TYPE_JUDGE)
+            ->orderBy('name')
             ->get();
     }
 

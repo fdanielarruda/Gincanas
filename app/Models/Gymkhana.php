@@ -32,6 +32,7 @@ class Gymkhana extends Model
 
     public function judges()
     {
-        return $this->belongsToMany(User::class, 'gymkhana_judges', 'gymkhana_id', 'judge_id');
+        return $this->belongsToMany(User::class, 'gymkhana_judges', 'gymkhana_id', 'judge_id')
+            ->orderBy('name');
     }
 }
